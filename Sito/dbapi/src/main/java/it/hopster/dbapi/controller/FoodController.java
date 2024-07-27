@@ -20,7 +20,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/users")
 @Tag(name = "Gestione utenti", description = "API di gestione utenti database Hopster")
-public class UserController {
+public class FoodController {
 
     @Autowired
     UserService userService;

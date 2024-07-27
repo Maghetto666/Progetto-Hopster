@@ -12,7 +12,7 @@ import java.util.Date;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CleaningAndServiceSupply {
+public class Supply {
     @Id
     @Column(name = "supply_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -24,6 +24,6 @@ public class Supplier {
 
     @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Invoice> invoices;
-    @JoinColumn(name = "supplier_id")
-    private Supplier supplier;
+    @JoinColumn(name = "invoice_id")
+    private Invoice invoice;
 }
