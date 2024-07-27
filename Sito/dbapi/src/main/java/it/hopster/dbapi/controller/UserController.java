@@ -44,7 +44,7 @@ public class UserController {
         User user = userService.getUserById(id);
         if (user == null) {
             logger.error("Utente non trovato con quell'id");
-            throw new UserNotFoundException("Libro not found with id: " + id);
+            throw new UserNotFoundException("User not found with id: " + id);
         }
         return user;
     }
@@ -87,5 +87,4 @@ public class UserController {
             throw new UserNotFoundException("User not found with id: " + id);
         }
     }
-
 }
