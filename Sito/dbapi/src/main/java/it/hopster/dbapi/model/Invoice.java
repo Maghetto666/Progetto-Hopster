@@ -5,20 +5,22 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Date;
+
 @Entity
-@Table(name = "users")
+@Table(name = "Invoices")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {
-
+public class Invoice {
     @Id
-    @Column(name= "user_id")
+    @Column(name = "invoice_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(nullable = false, length = 50)
-    private String username;
-    @Column(nullable = false, length = 50)
-    private String password;
-    private boolean isAdmin;
+    private Long invoiceNumber;
+    private Date deliveryDate;
+    private String suppliesType;
+
+
+
 }
