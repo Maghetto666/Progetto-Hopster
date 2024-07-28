@@ -20,7 +20,7 @@ public class SupplierService {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    public List<Supplier> getAll() {
+    public List<Supplier> getAllSuppliers() {
         return supplierRepository.findAll();
     }
 

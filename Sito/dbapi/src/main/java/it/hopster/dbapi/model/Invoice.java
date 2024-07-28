@@ -1,13 +1,11 @@
 package it.hopster.dbapi.model;
 
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Date;
-import java.util.function.Supplier;
 
 
 @Entity
@@ -27,5 +25,4 @@ public class Invoice {
     @ManyToOne
     @JoinColumn(name = "supplier_id")
     private Supplier supplier;
-
 }

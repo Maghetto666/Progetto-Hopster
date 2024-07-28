@@ -1,14 +1,13 @@
 package it.hopster.dbapi.service;
 
 import it.hopster.dbapi.model.Invoice;
-
+import it.hopster.dbapi.model.Supplier;
 import it.hopster.dbapi.repository.InvoiceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.function.Supplier;
 
 @Service
 public class InvoiceService {
