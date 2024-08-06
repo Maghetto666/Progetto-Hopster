@@ -1,0 +1,133 @@
+body {
+  display: flex;
+  flex-direction: row;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  width: 18vw;
+  height: 100vh;
+  background: #1D2128FF;
+  border-radius: 0px;
+  box-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f;
+}
+
+.line {
+  max-width: 18vw;
+  margin: 1vh 2vh;
+  height: 0px;
+  border-width: 1px;
+  border-color: #323842FF;
+  border-style: solid;
+  transform: rotate(0deg);
+}
+
+.logo-img {
+  width: 80px;
+  border-radius: 4px;
+  margin: 1vh 2vh;
+}
+
+.upper-buttons {
+  display: flex;
+  flex-direction: column;
+  font-family: Inter;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  opacity: 1;
+  margin: 1vh 2vh;
+}
+
+.bottom-buttons {
+  display: flex;
+  flex-direction: column;
+  margin: 1vh 2vh;
+}
+
+.profile-settings {
+  display: flex;
+  flex-direction: row;
+  margin: 1vh 2vh;
+}
+
+.upper-buttons .upper-buttons-item {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  color: #A7ADB7FF;
+  background: #1D2128FF;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: Inter;
+  font-size: 32px;
+}
+
+.upper-buttons .upper-buttons-item.indent {
+  padding-left: 33px;
+}
+
+.upper-buttons .upper-buttons-item.selected {
+  position: relative;
+  font-weight: 700;
+  color: #003138FF;
+  background: #00A9C0FF;
+}
+
+.upper-buttons .upper-buttons-item:hover {
+  color: #003138FF;
+  background: #00A9C0FF;
+}
+
+.selection {
+  font-family: Poppins;
+  font-size: 14px;
+  line-height: 22px;
+  font-weight: 700;
+  color: #9095A0FF;
+}
+
+/* Sidebar Menu 2 */
+.bottom-buttons {
+  width: 224px; 
+  height: 192px; 
+  display: flex; 
+  flex-direction: column; 
+  font-family: Inter; /* Body */
+  font-size: 16px; 
+  line-height: 26px; 
+  font-weight: 400; 
+  opacity: 1; 
+}
+/* Sidebar Menu 2 - Item */
+.bottom-buttons .bottom-buttons-item {
+  padding: 16px NaNpx; 
+  display: flex; 
+  align-items: center; 
+  justify-content: left; 
+  color: #565E6CFF; /* neutral-600 */
+  background: #000000FF; /* transparent */
+  border-radius: 4px; /* border-m */
+  gap: 8px; 
+  cursor: pointer; 
+  white-space: nowrap; 
+}
+/* Sidebar Menu 2 - Item indent */
+.bottom-buttons .bottom-buttons-item.indent {
+  padding-left: 33px; 
+}
+/* Sidebar Menu 2 - Selected item */
+.bottom-buttons .bottom-buttons-item.selected {
+  position: relative; 
+  font-weight: 700; 
+  color: #00BDD6FF; /* primary-500 */
+  background: #000000FF; /* transparent */
+}
+/* Sidebar Menu 2 - Selected item */
+.bottom-buttons .bottom-buttons-item:hover:active {
+  color: #00BDD6FF; /* primary-500 */
+  background: #000000FF; /* transparent */
+}

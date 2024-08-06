@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>LOGIN HOPSTER WAREHOUSE</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="sidebar">
+        <img src="Hopster logo.jpg" class="logo-img">
+        <div class="upper-buttons">
+            <text class="warehouse-btn upper-buttons-item">Magazzino</text>
+            <text class="suppliers-btn upper-buttons-item">Fornitori</text>
+            <text class="invoices-btn upper-buttons-item">Fatture</text>
+        </div>
+        <hr class="line">
+        <div class="bottom-buttons">
+            <text class="selection">Magazzino</text>
+            <text class="foods-btn bottom-buttons-item">Alimenti</text>
+            <text class="drinks-btn bottom-buttons-item">Bevande</text>
+            <text class="beers-btn bottom-buttons-item">Birra</text>
+            <text class="supplies-btn bottom-buttons-item">Pulizia e servizio</text>
+        </div>
+        <div class="profile-settings">
+            <img src="userImage.jpg">
+            Profile name
+            <img src="settingsIcon.svg">
+        </div>
+    </div>
+
+    <div class="mainPage">
+        <h1>Magazzino/Alimenti</h1>
+        <div class="sortBy">
+            <button class="sortBy-btn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Ordina per...
+            </button>
+            <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="#">Action</a></li>
+                <li><a class="dropdown-item" href="#">Another action</a></li>
+                <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+        </div>
+        <div class="productList">
+            <ul class="itemsList">
+                <li class="select-list">Seleziona</li>
+                <li class="product-list">Prodotto</li>
+                <li class="quantity-list">Quantità</li>
+                <li class="deliveryDate-list">Data di ricezione</li>
+                <li class="expiringDate-list">Data di scadenza</li>
+                <li class="frozen-list">Congelato</li>
+                <li class="frozenDate-list">In data</li>
+                <li class="modify-list"></li>
+            </ul>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
