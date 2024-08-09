@@ -251,21 +251,19 @@ body {
 
 .listDiv {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   background: #F8F9FAFF;
   border-radius: 6px;
   border-width: 3px;
   border-color: #DEE1E6FF;
   border-style: dashed;
   width: 75vw;
-  height: 85vh;
+  height: 80vh;
+  overflow: auto;
 }
 
-.productList {
-  width: 75vw;
-}
-
-.itemsList {
+.upperBar {
+  width: 74vw;
   display: flex;
   flex-direction: row;
   font-family: Epilogue;
@@ -276,11 +274,15 @@ body {
   list-style: none;
   text-align: center;
   padding-top: 1vh;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1vh;
 }
 
 .select-list {
   width: 6vw;
   margin-right: 1vw;
+  text-align: center;
 }
 
 .product-list {
@@ -316,14 +318,105 @@ body {
 }
 
 .modify-list {
-  width: 6vw;
+  width: 5vw;
   margin-left: 1vw;
+}
+
+.itemsList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.newItem {
+  width: 74vw;
+  max-height: 6vh;
+  height: 6vh;
+  font-family: Epilogue;
+  font-size: 20px;
+  line-height: 22px;
+  font-weight: 400;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding-left: 0;
+  margin: 0;
+  }
+
+.newItem:nth-child(odd) {
+  background-color: #ffffff5e
+}
+
+.checkbox-item {
+  width: 6vw;
+  margin-right: 1vw;
+}
+
+.product-item {
+  width: 16vw;
+  text-align: center;
+}
+
+.quantity-item {
+  width: 8vw;
+  text-align: center;
+}
+
+.deliveryDate-item {
+  width: 10vw;
+  text-align: center;
+}
+
+.expiringDate-item {
+  width: 10vw;
+  text-align: center;
+}
+
+.frozen-item {
+  width: 6vw;
+  font-weight: 600;
+  text-align: center;
+}
+
+.frozenDate-item {
+  width: 10vw;
+  font-weight: 600;
+  text-align: center;
+}
+
+.modify-btn {
+  width: 5vw;
+  margin-left: 1vw;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4vh;
+  font-family: Inter;
+  font-size: 24px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #FFFFFFFF;
+  background: #00BDD6FF;
+  opacity: 1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modify-btn:hover {
+  color: #FFFFFFFF;
+  background: #00A9C0FF;
 }
 
 .listButtons {
   display: flex;
   flex-direction: row;
-  width: 75vw;
+  width: 74vw;
   padding-top: 1vh;
   margin-bottom: 3vh;
   font-size: 24px;
@@ -353,6 +446,7 @@ input::placeholder {
   border: none;
   border-radius: 8px;
   margin-right: 1vw;
+  cursor: pointer;
 }
 
 .delete-btn:hover {
@@ -395,7 +489,7 @@ input::placeholder {
   align-items: center;
   justify-content: center;
   height: 4vh;
-  width: 6vw;
+  width: 5vw;
   font-family: Inter;
   font-size: 24px;
   line-height: 22px;
@@ -406,6 +500,7 @@ input::placeholder {
   border: none;
   border-radius: 8px;
   margin-left: 1vw;
+  cursor: pointer;
 }
 
 .add-btn:hover {
