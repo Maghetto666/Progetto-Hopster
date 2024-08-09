@@ -32,35 +32,61 @@ frozenCheckbox.addEventListener('click', function () {
     }
 });
 
+add_btn.addEventListener('click', function (){
+    const template = buildTemplateHTML();
+    itemsList.innerHTML += template;
+});
+
 // Recupera dai dal local storage
 const STORAGE_KEY = 'foods-key';
-let activities = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 
 // Mostra il contenuto della lista todo
-//showContent();
+showContent();
 
 // Funzione che aggiorna il contenuto della lista
 function showContent() {
     // Pulisce la lista
     itemsList.innerHTML = '';
     // Se la lista è vuota
-    if (activities.length != 0) {
+    if (products.length != 0) {
         // Cicliamo gli elementi dell'array
-        for (let i = 0; i < activities.length; i++) {
-            const template = buildTemplateHTML(activities[i]);
+        for (let i = 0; i < products.length; i++) {
+            const template = buildTemplateHTML(products[i]);
             itemsList.innerHTML += template;
         }
     }
 }
 
 // Funzione che genera l'HTML per attività todo
-function buildTemplateHTML(activity) {
+function buildTemplateHTML(newProduct) {
+    if (frozenCheckbox.checked == true) {
+        return `
+    <ul class="newItem">
+                    <li class="checkbox-item"><input type="checkbox"></li>
+                    <li class="product-item">{typedProduct}</li>
+                    <li class="quantity-item">{typedQuantity}</li>
+                    <li class="deliveryDate-item">{typedDeliveryDate}</li>
+                    <li class="expiringDate-item">{typedExpiringDate}</li>
+                    <li class="frozen-item"><input type="checkbox" checked disabled></li>
+                    <li class="frozenDate-item">{typedFrozenDate}</li>
+                    <li class="modify-item"><button class="modify-btn">Modifica</button></li>
+                </ul>
+    `
+    } else {
     return `
-    <li class="todo-item">
-        <p class="todo-text">${activity}</p>
-        <div class="todo-check"><img src="images/check.svg"></div>
-    </li>
-    `;
+    <ul class="newItem">
+                    <li class="checkbox-item"><input type="checkbox"></li>
+                    <li class="product-item">{typedProduct}</li>
+                    <li class="quantity-item">{typedQuantity}</li>
+                    <li class="deliveryDate-item">{typedDeliveryDate}</li>
+                    <li class="expiringDate-item">{typedExpiringDate}</li>
+                    <li class="frozen-item"><input type="checkbox" disabled></li>
+                    <li class="frozenDate-item" disabled></li>
+                    <li class="modify-item"><button class="modify-btn">Modifica</button></li>
+                </ul>
+    `
+}
 }
 
 warehouse_btn.addEventListener('mouseover', function () {
