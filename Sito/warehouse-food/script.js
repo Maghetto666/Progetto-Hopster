@@ -21,8 +21,22 @@ const expiringDate_input = document.querySelector('.expiringDate-input');
 const frozenCheckbox = document.querySelector('.frozenCheckbox');
 const frozenDate_input = document.querySelector('.frozenDate-input');
 const add_btn = document.querySelector('.add-btn');
+const delete_btn = document.querySelector('.delete-btn');
+
+const newItems = document.querySelectorAll('.newItem');
+
+var items = [];
 
 frozenDate_input.disabled = true;
+
+// Recupera dai dal local storage
+const STORAGE_KEY = 'foods-key';
+let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+let index = products.length;
+console.log(index);
+// Mostra il contenuto della lista
+showContent();
 
 frozenCheckbox.addEventListener('click', function () {
     if (frozenDate_input.disabled == true) {
@@ -32,62 +46,98 @@ frozenCheckbox.addEventListener('click', function () {
     }
 });
 
-
-
 add_btn.addEventListener('click', function () {
     let product = product_input.value.trim();
     let quantity = quantity_input.value;
     let deliveryDate = deliveryDate_input.value;
     let expiringDate = expiringDate_input.value;
     let frozenDate = frozenDate_input.value;
+    const id = index;
+
+    itemToAdd = {
+        product: product,
+        quantity: quantity,
+        deliverDate: deliveryDate,
+        checked: frozenCheckbox.checked,
+        frozenDate: frozenDate,
+        expiringDate: expiringDate,
+        itemID: id
+    }
 
     if (frozenCheckbox.checked == true) {
         frozenDate_input.required = true;
         if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0 || frozenDate == 0) {
             return;
         } else {
-            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, frozenDate);
+            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, frozenDate, id);
             itemsList.innerHTML += template;
+            index++;
+            items.push(itemToAdd);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+            
         }
     } else {
         frozenDate_input.required = false;
         if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0) {
             return;
         } else {
-            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, frozenDate);
+            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, frozenDate, id);
             itemsList.innerHTML += template;
+            index++;
+            items.push(itemToAdd);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+           
         }
     }
+    showContent();
 });
 
-// Recupera dai dal local storage
-const STORAGE_KEY = 'foods-key';
-let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+delete_btn.addEventListener('click', function () {
 
-// Mostra il contenuto della lista
-showContent();
+    newItems.forEach((item) => {
+        const checkBox = item.querySelector('.checkbox');
+        let checked = checkBox.checked;
+        if (checked == true) {
+            console.log("true");
+            item.innerHTML = "";
+        } else {
+            console.log("false");
+            return;
+        }
+    })
+})
 
 // Funzione che aggiorna il contenuto della lista
 function showContent() {
-    // Pulisce la lista
+   
     itemsList.innerHTML = '';
-    // Se la lista è vuota
-    if (products.length != 0) {
-        // Cicliamo gli elementi dell'array
-        for (let i = 0; i < products.length; i++) {
-            const template = buildTemplateHTML(products[i]);
+           
+        products.forEach((product) => {
+            const template = buildTemplateHTML(product.product,
+                product.quantity,
+                product.deliverDate,
+                product.checked,
+                product.expiringDate,
+                product.frozenDate,
+                product.itemID
+            );
+
             itemsList.innerHTML += template;
-        }
-    }
+        })
+    
 }
 
 // Funzione che genera l'HTML per attività
-function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typedExpiringDate, typedFrozenDate) {
-    if (frozenCheckbox.checked == true) {
+function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, checked, typedExpiringDate, typedFrozenDate, id) {
+
+
+
+    if (checked == true) {
         frozenDate_input.required = true;
+
         return `
-    <ul class="newItem">
-                    <li class="checkbox-item"><input type="checkbox"></li>
+                <ul class="newItem" id="${id}">
+                    <li class="checkbox-item"><input type="checkbox" class="checkbox"></li>
                     <li class="product-item">${typedProduct}</li>
                     <li class="quantity-item">${typedQuantity}</li>
                     <li class="deliveryDate-item">${typedDeliveryDate}</li>
@@ -98,9 +148,10 @@ function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typed
                 </ul>
     `
     } else {
+
         return `
-    <ul class="newItem">
-                    <li class="checkbox-item"><input type="checkbox"></li>
+                <ul class="newItem" id="${id}">
+                    <li class="checkbox-item"><input type="checkbox" class="checkbox"></li>
                     <li class="product-item">${typedProduct}</li>
                     <li class="quantity-item">${typedQuantity}</li>
                     <li class="deliveryDate-item">${typedDeliveryDate}</li>
@@ -111,6 +162,8 @@ function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typed
                 </ul>
     `
     }
+
+
 }
 
 warehouse_btn.addEventListener('mouseover', function () {

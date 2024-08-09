@@ -351,9 +351,14 @@ body {
   background-color: #ffffff5e
 }
 
+.hiddenID {
+  display: none;
+}
+
 .checkbox-item {
   width: 6vw;
   margin-right: 1vw;
+  text-align: center;
 }
 
 .product-item {
