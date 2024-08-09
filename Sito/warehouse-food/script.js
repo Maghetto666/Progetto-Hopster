@@ -12,6 +12,56 @@ const foods_btn = document.querySelector('.foods-btn');
 const drinks_btn = document.querySelector('.drinks-btn');
 const beers_btn = document.querySelector('.beers-btn');
 const supplies_btn = document.querySelector('.supplies-btn');
+const itemsList = document.querySelector('.itemsList');
+
+const product_input = document.querySelector('.product-input');
+const quantity_input = document.querySelector('.quantity-input');
+const deliveryDate_input = document.querySelector('.deliveryDate-input');
+const expiringDate_input = document.querySelector('.expiringDate-input');
+const frozenCheckbox = document.querySelector('.frozenCheckbox');
+const frozenDate_input = document.querySelector('.frozenDate-input');
+const add_btn = document.querySelector('.add-btn');
+
+frozenDate_input.disabled = true;
+
+frozenCheckbox.addEventListener('click', function () {
+    if (frozenDate_input.disabled == true) {
+        frozenDate_input.disabled = false;
+    } else {
+        frozenDate_input.disabled = true;
+    }
+});
+
+// Recupera dai dal local storage
+const STORAGE_KEY = 'foods-key';
+let activities = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
+
+// Mostra il contenuto della lista todo
+//showContent();
+
+// Funzione che aggiorna il contenuto della lista
+function showContent() {
+    // Pulisce la lista
+    itemsList.innerHTML = '';
+    // Se la lista è vuota
+    if (activities.length != 0) {
+        // Cicliamo gli elementi dell'array
+        for (let i = 0; i < activities.length; i++) {
+            const template = buildTemplateHTML(activities[i]);
+            itemsList.innerHTML += template;
+        }
+    }
+}
+
+// Funzione che genera l'HTML per attività todo
+function buildTemplateHTML(activity) {
+    return `
+    <li class="todo-item">
+        <p class="todo-text">${activity}</p>
+        <div class="todo-check"><img src="images/check.svg"></div>
+    </li>
+    `;
+}
 
 warehouse_btn.addEventListener('mouseover', function () {
     warehouse_icon.classList.add("upper-icons-hover");
