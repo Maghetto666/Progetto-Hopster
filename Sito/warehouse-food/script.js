@@ -40,7 +40,8 @@ let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 showContent();
 
 // Index for the items ID
-let index = products.length;
+let lastElement = products.slice(-1);
+let id = lastElement[0].itemID;
 
 // Toggle the frozen date checkbox
 frozenCheckbox.addEventListener('click', function () {
@@ -61,7 +62,7 @@ add_btn.addEventListener('click', function () {
     let expiringDate = expiringDate_input.value;
     let checked = frozenCheckbox.checked;
     let frozenDate = frozenDate_input.value;
-    const id = index;
+    id++;
 
     // puts the parameters into a new object 
     itemToAdd = {
@@ -87,9 +88,8 @@ add_btn.addEventListener('click', function () {
             // adds the new item to the list and to the local storage
             const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, checked, frozenDate, id);
             itemsList.innerHTML += template;
-            index++;
-            items.push(itemToAdd);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+            products.push(itemToAdd);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
         }
     } else {
         frozenDate_input.required = false;
@@ -98,9 +98,8 @@ add_btn.addEventListener('click', function () {
         } else {
             const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, checked, frozenDate, id);
             itemsList.innerHTML += template;
-            index++;
-            items.push(itemToAdd);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(items));
+            products.push(itemToAdd);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
         }
     }
 
@@ -112,7 +111,7 @@ add_btn.addEventListener('click', function () {
 delete_btn.addEventListener('click', function () {
 
     newItems.forEach((item) => {
-        const checkBox = item.querySelector('.checkbox');
+        let checkBox = item.querySelector('.checkbox');
         let checked = checkBox.checked;
         if (checked == true) {
             console.log("true");
