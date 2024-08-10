@@ -30,18 +30,14 @@ frozenDate_input.disabled = true;
 const add_btn = document.querySelector('.add-btn');
 const delete_btn = document.querySelector('.delete-btn');
 
-// Functions variables
-const newItems = document.querySelectorAll('.newItem');
-var items = [];
-
 // Starters
 const STORAGE_KEY = 'foods-key';
 let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 showContent();
 
 // Index for the items ID
-let lastElement = products.slice(-1);
-let id = lastElement[0].itemID;
+let id = 0;
+let lastElement;
 
 // Toggle the frozen date checkbox
 frozenCheckbox.addEventListener('click', function () {
@@ -62,7 +58,7 @@ add_btn.addEventListener('click', function () {
     let expiringDate = expiringDate_input.value;
     let checked = frozenCheckbox.checked;
     let frozenDate = frozenDate_input.value;
-    id++;
+    let itemID = id++;
 
     // puts the parameters into a new object 
     itemToAdd = {
@@ -86,7 +82,7 @@ add_btn.addEventListener('click', function () {
             return;
         } else {
             // adds the new item to the list and to the local storage
-            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, checked, frozenDate, id);
+            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, checked, frozenDate, itemID);
             itemsList.innerHTML += template;
             products.push(itemToAdd);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
@@ -96,7 +92,7 @@ add_btn.addEventListener('click', function () {
         if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0) {
             return;
         } else {
-            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, checked, frozenDate, id);
+            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, checked, frozenDate, itemID);
             itemsList.innerHTML += template;
             products.push(itemToAdd);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
@@ -109,19 +105,32 @@ add_btn.addEventListener('click', function () {
 
 // TODO - Delete the selected items from list and local storage
 delete_btn.addEventListener('click', function () {
-
+    const newItems = document.querySelectorAll('.newItem');
     newItems.forEach((item) => {
         let checkBox = item.querySelector('.checkbox');
-        let checked = checkBox.checked;
-        if (checked == true) {
-            console.log("true");
-            item.innerHTML = "";
+        let checkactive = checkBox.checked;
+        if (checkactive === true) {
+            // products.splice(item, 1);
+            localStorage.removeItem(item);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+
         } else {
-            console.log("false");
             return;
-        }
+        };
+        showContent();
     })
 })
+
+// Get id from the local storage or define a new one
+function setID() {
+    if (products.slice(-1) == null) {
+        id = 0;
+    }
+    else {
+        lastElement = products.slice(-1);
+        id = lastElement[0].itemID;
+    }
+}
 
 // Updates the list content
 function showContent() {
@@ -148,7 +157,6 @@ function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typed
 
     if (checked == true) {
         frozenDate_input.required = true;
-
         return `
                 <ul class="newItem" id="${id}">
                     <li class="checkbox-item"><input type="checkbox" class="checkbox"></li>
@@ -162,7 +170,6 @@ function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typed
                 </ul>
     `
     } else {
-
         return `
                 <ul class="newItem" id="${id}">
                     <li class="checkbox-item"><input type="checkbox" class="checkbox"></li>
