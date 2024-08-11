@@ -29,6 +29,7 @@ frozenDate_input.disabled = true;
 // Main page buttons
 const add_btn = document.querySelector('.add-btn');
 const delete_btn = document.querySelector('.delete-btn');
+const modify_btn = document.querySelector('.modify-btn');
 
 // Starters
 const STORAGE_KEY = 'foods-key';
@@ -95,18 +96,26 @@ add_btn.addEventListener('click', function () {
         }
     }
 
+    product_input.value = "";
+    quantity_input.value = "";
+    deliveryDate_input.value = "";
+    expiringDate_input.value = "";
+    frozenCheckbox.checked = false;
+    frozenDate_input.value = "";
+    frozenDate_input.disabled = true;
+
     // updates the list
     showContent;
 });
 
-// TODO - Delete the selected items from list and local storage
+// Delete the selected items from list and local storage
 delete_btn.addEventListener('click', function () {
     const newItems = document.querySelectorAll('.newItem');
     newItems.forEach((item) => {
         let checkBox = item.querySelector('.checkbox');
         let checkactive = checkBox.checked;
         if (checkactive === true) {
-            let i = item.id;            
+            let i = item.id;
             if (i > -1) {
                 products.splice(i, 1);
             }
@@ -117,6 +126,11 @@ delete_btn.addEventListener('click', function () {
         showContent();
     })
 })
+
+// TODO - Modifies the selected item
+// modify_btn.addEventListener('click', function () {
+// let toModifyId = modify_btn.id;
+// })
 
 // Updates the list content
 function showContent() {

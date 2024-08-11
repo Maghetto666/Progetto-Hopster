@@ -345,7 +345,7 @@ body {
   background-color: #fff;
   padding-left: 0;
   margin: 0;
-  }
+}
 
 .newItem:nth-child(odd) {
   background-color: #ffffff5e
