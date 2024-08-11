@@ -35,10 +35,6 @@ const STORAGE_KEY = 'foods-key';
 let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
 showContent();
 
-// Index for the items ID
-let id = 0;
-let lastElement;
-
 // Toggle the frozen date checkbox
 frozenCheckbox.addEventListener('click', function () {
     if (frozenDate_input.disabled == true) {
@@ -58,7 +54,7 @@ add_btn.addEventListener('click', function () {
     let expiringDate = expiringDate_input.value;
     let checked = frozenCheckbox.checked;
     let frozenDate = frozenDate_input.value;
-    let itemID = id++;
+    let itemID = products.length;
 
     // puts the parameters into a new object 
     itemToAdd = {
@@ -68,7 +64,7 @@ add_btn.addEventListener('click', function () {
         expiringDate: expiringDate,
         checked: checked,
         frozenDate: frozenDate,
-        itemID: id
+        itemID: itemID
     }
 
     // checks if the frozen date checkbox is active or not
@@ -110,10 +106,11 @@ delete_btn.addEventListener('click', function () {
         let checkBox = item.querySelector('.checkbox');
         let checkactive = checkBox.checked;
         if (checkactive === true) {
-            // products.splice(item, 1);
-            localStorage.removeItem(item);
+            let i = item.id;            
+            if (i > -1) {
+                products.splice(i, 1);
+            }
             localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-
         } else {
             return;
         };
@@ -121,32 +118,20 @@ delete_btn.addEventListener('click', function () {
     })
 })
 
-// Get id from the local storage or define a new one
-function setID() {
-    if (products.slice(-1) == null) {
-        id = 0;
-    }
-    else {
-        lastElement = products.slice(-1);
-        id = lastElement[0].itemID;
-    }
-}
-
 // Updates the list content
 function showContent() {
 
     itemsList.innerHTML = '';
 
-    products.forEach((product) => {
+    products.forEach((product, index) => {
         const template = buildTemplateHTML(product.product,
             product.quantity,
             product.deliverDate,
             product.expiringDate,
             product.checked,
             product.frozenDate,
-            product.itemID
+            index
         );
-
         itemsList.innerHTML += template;
     })
 
@@ -159,27 +144,27 @@ function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typed
         frozenDate_input.required = true;
         return `
                 <ul class="newItem" id="${id}">
-                    <li class="checkbox-item"><input type="checkbox" class="checkbox"></li>
-                    <li class="product-item">${typedProduct}</li>
-                    <li class="quantity-item">${typedQuantity}</li>
-                    <li class="deliveryDate-item">${typedDeliveryDate}</li>
-                    <li class="expiringDate-item">${typedExpiringDate}</li>
-                    <li class="frozen-item"><input type="checkbox" checked disabled></li>
-                    <li class="frozenDate-item">${typedFrozenDate}</li>
-                    <li class="modify-item"><button class="modify-btn">Modifica</button></li>
+                    <li class="checkbox-item" id="${id}"><input type="checkbox" class="checkbox"></li>
+                    <li class="product-item" id="${id}">${typedProduct}</li>
+                    <li class="quantity-item" id="${id}">${typedQuantity}</li>
+                    <li class="deliveryDate-item" id="${id}">${typedDeliveryDate}</li>
+                    <li class="expiringDate-item" id="${id}">${typedExpiringDate}</li>
+                    <li class="frozen-item" id="${id}"><input type="checkbox" checked disabled></li>
+                    <li class="frozenDate-item" id="${id}">${typedFrozenDate}</li>
+                    <li class="modify-item" id="${id}"><button class="modify-btn">Modifica</button></li>
                 </ul>
     `
     } else {
         return `
                 <ul class="newItem" id="${id}">
-                    <li class="checkbox-item"><input type="checkbox" class="checkbox"></li>
-                    <li class="product-item">${typedProduct}</li>
-                    <li class="quantity-item">${typedQuantity}</li>
-                    <li class="deliveryDate-item">${typedDeliveryDate}</li>
-                    <li class="expiringDate-item">${typedExpiringDate}</li>
-                    <li class="frozen-item"><input type="checkbox" disabled></li>
-                    <li class="frozenDate-item" disabled></li>
-                    <li class="modify-item"><button class="modify-btn">Modifica</button></li>
+                    <li class="checkbox-item" id="${id}"><input type="checkbox" class="checkbox"></li>
+                    <li class="product-item" id="${id}">${typedProduct}</li>
+                    <li class="quantity-item" id="${id}">${typedQuantity}</li>
+                    <li class="deliveryDate-item" id="${id}">${typedDeliveryDate}</li>
+                    <li class="expiringDate-item" id="${id}">${typedExpiringDate}</li>
+                    <li class="frozen-item" id="${id}"><input type="checkbox" disabled></li>
+                    <li class="frozenDate-item" id="${id}" disabled></li>
+                    <li class="modify-item" id="${id}"><button class="modify-btn">Modifica</button></li>
                 </ul>
     `
     }
