@@ -351,10 +351,6 @@ body {
   background-color: #ffffff5e
 }
 
-.hiddenID {
-  display: none;
-}
-
 .checkbox-item {
   width: 6vw;
   margin-right: 1vw;
@@ -509,6 +505,30 @@ input::placeholder {
 }
 
 .add-btn:hover {
+  color: #FFFFFFFF;
+  background: #00A9C0FF;
+}
+
+.activated-modify-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4vh;
+  width: 5vw;
+  font-family: Inter;
+  font-size: 24px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #FFFFFFFF;
+  background: #00BDD6FF;
+  opacity: 1;
+  border: none;
+  border-radius: 8px;
+  margin-left: 1vw;
+  cursor: pointer;
+}
+
+.activated-modify-btn:hover {
   color: #FFFFFFFF;
   background: #00A9C0FF;
 }
