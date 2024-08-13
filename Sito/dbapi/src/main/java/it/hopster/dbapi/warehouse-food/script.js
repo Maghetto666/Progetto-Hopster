@@ -24,19 +24,19 @@ const deliveryDate_input = document.querySelector('.deliveryDate-input');
 const expiringDate_input = document.querySelector('.expiringDate-input');
 const frozenCheckbox = document.querySelector('.frozenCheckbox');
 const frozenDate_input = document.querySelector('.frozenDate-input');
-const hidden_id = document.querySelector('.hidden-id');
 frozenDate_input.disabled = true;
+let hidden_id = document.querySelectorAll('.hidden-id');
 
 // Main page buttons
 const add_btn = document.querySelector('.add-btn');
 const delete_btn = document.querySelector('.delete-btn');
 const activated_modify_btn = document.querySelector('.activated-modify-btn');
 
+
 // Starters
 activated_modify_btn.style.display = "none";
 const STORAGE_KEY = 'foods-key';
 let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-let newArray = [];
 showContent();
 
 // Toggle the frozen date checkbox
@@ -52,23 +52,21 @@ frozenCheckbox.addEventListener('click', function () {
 add_btn.addEventListener('click', function () {
 
     // gets the parameters from the inputs
-    let selected = false;
     let product = product_input.value.trim();
     let quantity = quantity_input.value;
     let deliveryDate = deliveryDate_input.value;
     let expiringDate = expiringDate_input.value;
-    let frozenChecked = frozenCheckbox.checked;
+    let checked = frozenCheckbox.checked;
     let frozenDate = frozenDate_input.value;
     let itemID = products.length;
 
     // puts the parameters into a new object 
     itemToAdd = {
-        selected: selected,
         product: product,
         quantity: quantity,
         deliverDate: deliveryDate,
         expiringDate: expiringDate,
-        frozenChecked: frozenChecked,
+        checked: checked,
         frozenDate: frozenDate,
         itemID: itemID
     }
@@ -84,7 +82,7 @@ add_btn.addEventListener('click', function () {
             return;
         } else {
             // adds the new item to the list and to the local storage
-            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, frozenChecked, frozenDate, itemID);
+            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, checked, frozenDate, itemID);
             itemsList.innerHTML += template;
             products.push(itemToAdd);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
@@ -94,7 +92,7 @@ add_btn.addEventListener('click', function () {
         if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0) {
             return;
         } else {
-            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, frozenChecked, frozenDate, itemID);
+            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, checked, frozenDate, itemID);
             itemsList.innerHTML += template;
             products.push(itemToAdd);
             localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
@@ -113,12 +111,14 @@ add_btn.addEventListener('click', function () {
     showContent();
 });
 
-// Delete the selected items from list and local storage    TODO deletes half items if multiple choices are activated
+// Delete the selected items from list and local storage
 delete_btn.addEventListener('click', function () {
     const newItems = document.querySelectorAll('.newItem');
     newItems.forEach((item) => {
-        let i = item.id;
-        if (products[i].selected === true) {
+        let checkBox = item.querySelector('.checkbox');
+        let checkactive = checkBox.checked;
+        if (checkactive === true) {
+            let i = item.id;
             if (i > -1) {
                 products.splice(i, 1);
             }
@@ -141,6 +141,7 @@ function showContent() {
     frozenCheckbox.checked = false;
     frozenDate_input.value = "";
     frozenDate_input.disabled = true;
+    hidden_id.innerText = "";
 
     products.forEach((product, index) => {
         const template = buildTemplateHTML(product.product,
@@ -152,22 +153,11 @@ function showContent() {
             index
         );
         itemsList.innerHTML += template;
-    });
-
-    const selectCheckbox = document.querySelectorAll('.select-checkbox');
-    selectCheckbox.forEach((checkbox) => {
-        checkbox.addEventListener('change', function () {
-            let itemid = checkbox.id;
-            if (checkbox.checked) {
-                products[itemid].selected = true;
-            } else {
-                products[itemid].selected = false;
-            }
-        })
-    });
+    })
 
     const modify_btn = document.querySelectorAll('.modify-btn');
-    // Modifies the selected item TO FIX
+
+    // Modifies the selected item
     // add event listener to every modify buttons in the list
     for (let i = 0; i < modify_btn.length; i++) {
         modify_btn[i].addEventListener('click', function () {
@@ -190,63 +180,67 @@ function showContent() {
             expiringDate_input.value = itemToModify.expiringDate;
             frozenCheckbox.checked = itemToModify.checked;
             frozenDate_input.value = itemToModify.frozenDate;
+            hidden_id.innerText = id;
+
             if (frozenCheckbox === true) {
                 frozenDate_input.disabled = false;
             } else {
                 frozenDate_input.disabled = true;
+            };
+        })
+
+        // add event listener to the activated modify button to change the object in the array
+        activated_modify_btn.addEventListener('click', function () {
+
+            // new variables to put inside a new object
+            let modifiedproduct = product_input.value;
+            let modifiedquantity = quantity_input.value;
+            let modifieddeliveryDate = deliveryDate_input.value;
+            let modifiedexpiringDate = expiringDate_input.value;
+            let modifiedchecked = frozenCheckbox.checked;
+            let modifiedfrozenDate = frozenDate_input.value;
+            let id = hidden_id.innerText;
+
+            // the new object with the new variables
+            let modifiedItem = {
+                product: modifiedproduct,
+                quantity: modifiedquantity,
+                deliverDate: modifieddeliveryDate,
+                expiringDate: modifiedexpiringDate,
+                checked: modifiedchecked,
+                frozenDate: modifiedfrozenDate,
+                id: id
             }
-            hidden_id.value = id;
-        });
+
+            
+            // if the new item has the same id as the old one it modifies it
+            products.forEach((product) => {
+                console.log(product);
+
+                if (product.itemID === modifiedItem.id) {
+                    
+                    product = modifiedItem;
+                    
+                } else {
+                    return;
+                }
+            })
+        
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+
+            // shows again the add button and the modify buttons, hides the activated modify button
+            activated_modify_btn.style.display = "none";
+            add_btn.style.display = "block";
+            for (let i = 0; i < modify_btn.length; i++) {
+                modify_btn[i].style.visibility = "visible";
+            }
+            showContent();
+        })
+
     }
 }
 
-// add event listener to the activated modify button to change the object in the array
-activated_modify_btn.addEventListener('click', function () {
 
-    // new variables to put inside a new object
-    let modifiedproduct = product_input.value;
-    let modifiedquantity = quantity_input.value;
-    let modifieddeliveryDate = deliveryDate_input.value;
-    let modifiedexpiringDate = expiringDate_input.value;
-    let modifiedchecked = frozenCheckbox.checked;
-    let modifiedfrozenDate = frozenDate_input.value;
-    let id = hidden_id.value;
-
-    // the new object with the new variables
-    let modifiedItem = {
-        product: modifiedproduct,
-        quantity: modifiedquantity,
-        deliverDate: modifieddeliveryDate,
-        expiringDate: modifiedexpiringDate,
-        checked: modifiedchecked,
-        frozenDate: modifiedfrozenDate,
-        id: id
-    }
-
-    // if the new item has the same id as the selected product
-    console.log(products);
-
-    for (let count = 0; products.length; count++) {
-
-        if (products[count] === modifiedItem.id) {
-            products.splice(products[count], 1, modifiedItem);
-        }
-        else {
-            return;
-        }
-    }
-    console.log(products);
-
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-
-    // shows again the add button and the modify buttons, hides the activated modify button
-    activated_modify_btn.style.display = "none";
-    add_btn.style.display = "block";
-    for (let i = 0; i < modify_btn.length; i++) {
-        modify_btn[i].style.visibility = "visible";
-    }
-    showContent();
-});
 
 // Creates HTML to add a new item in the list
 function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typedExpiringDate, checked, typedFrozenDate, id) {
@@ -255,12 +249,12 @@ function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typed
         frozenDate_input.required = true;
         return `
                 <ul class="newItem" id="${id}">
-                    <li class="checkbox-item" id="${id}"><input type="checkbox" class="select-checkbox" id="${id}"></li>
+                    <li class="checkbox-item" id="${id}"><input type="checkbox" class="checkbox" style="height: 25vw;"</li>
                     <li class="product-item" id="${id}">${typedProduct}</li>
                     <li class="quantity-item" id="${id}">${typedQuantity}</li>
                     <li class="deliveryDate-item" id="${id}">${typedDeliveryDate}</li>
                     <li class="expiringDate-item" id="${id}">${typedExpiringDate}</li>
-                    <li class="frozen-item" id="${id}"><input type="checkbox" class="frozen-checkbox" checked disabled></li>
+                    <li class="frozen-item" id="${id}"><input type="checkbox" class="checkbox" checked disabled></li>
                     <li class="frozenDate-item" id="${id}">${typedFrozenDate}</li>
                     <li class="modify-item"><button class="modify-btn" id="${id}">Modifica</button></li>
                 </ul>
@@ -268,17 +262,19 @@ function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typed
     } else {
         return `
                 <ul class="newItem" id="${id}">
-                    <li class="checkbox-item" id="${id}"><input type="checkbox" class="select-checkbox" id="${id}"></li>
+                    <li class="checkbox-item" id="${id}"><input type="checkbox" class="checkbox"></li>
                     <li class="product-item" id="${id}">${typedProduct}</li>
                     <li class="quantity-item" id="${id}">${typedQuantity}</li>
                     <li class="deliveryDate-item" id="${id}">${typedDeliveryDate}</li>
                     <li class="expiringDate-item" id="${id}">${typedExpiringDate}</li>
-                    <li class="frozen-item" id="${id}"><input type="checkbox" class="frozen-checkbox" disabled></li>
+                    <li class="frozen-item" id="${id}"><input type="checkbox" class="checkbox" disabled></li>
                     <li class="frozenDate-item" id="${id}" disabled></li>
                     <li class="modify-item"><button class="modify-btn" id="${id}">Modifica</button></li>
                 </ul>
     `
     }
+
+
 }
 
 // Mouseover and mouseout functions

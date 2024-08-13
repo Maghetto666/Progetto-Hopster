@@ -1,0 +1,538 @@
+body {
+  display: flex;
+  flex-direction: row;
+  padding: auto;
+  margin: auto;
+}
+
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  min-width: 16vw;
+  width: 18vw;
+  height: 100vh;
+  background: #1D2128FF;
+  border-radius: 0px;
+  box-shadow: 0px 0px 1px #171a1f, 0px 0px 2px #171a1f;
+}
+
+.line {
+  max-width: 18vw;
+  margin: 1vh 2vh;
+  height: 0px;
+  border-width: 1px;
+  border-color: #323842FF;
+  border-style: solid;
+  transform: rotate(0deg);
+}
+
+.logo-img {
+  width: 80px;
+  border-radius: 4px;
+  margin: 1vh 2vh;
+}
+
+.upper-buttons {
+  display: flex;
+  flex-direction: column;
+  font-family: Inter;
+  font-size: 16px;
+  line-height: 26px;
+  font-weight: 400;
+  opacity: 1;
+  margin: 1vh 2vh;
+  color: #a7adb7;
+  background: #1D2128FF;
+}
+
+.upper-buttons-item {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-family: Inter;
+  font-size: 32px;
+}
+
+.upper-buttons-item:hover {
+  color: #003138FF;
+  background: #00A9C0FF;
+}
+
+.upper-selected {
+  color: #003138;
+  background: #00A9C0FF;
+}
+
+.upper-icons {
+  max-width: 32px;
+  width: 32px;
+  filter: invert(74%) sepia(10%) saturate(275%) hue-rotate(179deg) brightness(95%) contrast(82%);
+}
+
+.upper-icons-hover {
+  filter: invert(16%) sepia(9%) saturate(6898%) hue-rotate(148deg) brightness(94%) contrast(103%);
+}
+
+.selected-upper-icon {
+  filter: invert(16%) sepia(9%) saturate(6898%) hue-rotate(148deg) brightness(94%) contrast(103%);
+}
+
+.selection {
+  font-family: Poppins;
+  font-size: 30px;
+  line-height: 22px;
+  font-weight: 700;
+  color: #9095A0FF;
+  margin: 2vh 2vh;
+}
+
+.bottom-buttons {
+  margin: 1vh 2vh auto 2vh;
+  display: flex;
+  flex-direction: column;
+  font-family: Inter;
+  font-size: 32px;
+  line-height: 26px;
+  font-weight: 400;
+  opacity: 1;
+  color: #565e6c;
+  background: #1D2128FF;
+}
+
+.bottom-buttons .bottom-buttons-item {
+  padding: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: left;
+  border-radius: 4px;
+  gap: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  font-size: 32px;
+}
+
+.bottom-buttons .bottom-buttons-item.indent {
+  padding-left: 33px;
+}
+
+.bottom-buttons .bottom-buttons-item:hover {
+  color: #00bdd6;
+  background: #1D2128FF;
+}
+
+.bottom-selected {
+  color: #00BDD6FF;
+  background: #1D2128FF;
+}
+
+.bottom-icons {
+  max-width: 32px;
+  width: 32px;
+  filter: invert(35%) sepia(7%) saturate(1187%) hue-rotate(180deg) brightness(94%) contrast(81%);
+}
+
+.bottom-icons-hover {
+  filter: invert(47%) sepia(68%) saturate(1590%) hue-rotate(151deg) brightness(103%) contrast(101%);
+}
+
+.selected-bottom-icon {
+  filter: invert(47%) sepia(68%) saturate(1590%) hue-rotate(151deg) brightness(103%) contrast(101%);
+}
+
+.profile-settings {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  align-self: center;
+  margin: 1vh 2vh;
+  font-family: Poppins;
+  font-size: 32px;
+  line-height: 26px;
+  font-weight: 700;
+  color: #DEE1E6FF;
+  width: 18vw;
+}
+
+.settings-icon {
+  max-width: 32px;
+  width: 32px;
+  filter: invert(74%) sepia(10%) saturate(275%) hue-rotate(179deg) brightness(95%) contrast(82%);
+}
+
+.settings-icon:hover {
+  filter: invert(47%) sepia(68%) saturate(1590%) hue-rotate(151deg) brightness(103%) contrast(101%);
+}
+
+.user_image {
+  background: #A6F5FFFF;
+  opacity: 1;
+  overflow: hidden;
+  border-radius: 40px;
+  width: 64px;
+  height: 64px;
+}
+
+.warehouse-section {
+  font-family: Poppins;
+  font-size: 32px;
+  line-height: 48px;
+  font-weight: 700;
+  color: #323842FF;
+  text-align: center;
+}
+
+.mainPage {
+  width: 82vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.upperDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 75vw;
+  justify-self: start;
+}
+
+.dropbtn {
+  position: relative;
+  display: inline-block;
+  opacity: 1;
+  width: 16vw;
+  height: 4vh;
+  font-family: Inter;
+  font-size: 24px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #FFFFFFFF;
+  background: #00BDD6FF;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.dropdown-content {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  font-family: Inter;
+  font-size: 24px;
+  min-width: 16vw;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+}
+
+.dropdown-content a {
+  color: black;
+  padding: 2vh;
+  text-decoration: none;
+  display: block;
+}
+
+.dropdown-content a:hover {
+  background-color: #f1f1f1
+}
+
+.dropdown:hover .dropdown-content {
+  display: block;
+}
+
+.dropdown:hover .dropbtn {
+  background-color: #00A9C0FF;
+}
+
+.listDiv {
+  display: flex;
+  flex-direction: column;
+  background: #F8F9FAFF;
+  border-radius: 6px;
+  border-width: 3px;
+  border-color: #DEE1E6FF;
+  border-style: dashed;
+  width: 75vw;
+  height: 80vh;
+  overflow: auto;
+}
+
+.upperBar {
+  width: 74vw;
+  display: flex;
+  flex-direction: row;
+  font-family: Epilogue;
+  font-size: 20px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #565E6CFF;
+  list-style: none;
+  text-align: center;
+  padding-top: 1vh;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1vh;
+}
+
+.select-list {
+  width: 6vw;
+  margin-right: 1vw;
+  text-align: center;
+}
+
+.product-list {
+  width: 16vw;
+  text-align: center;
+}
+
+.quantity-list {
+  width: 8vw;
+  text-align: center;
+}
+
+.deliveryDate-list {
+  width: 10vw;
+  text-align: center;
+}
+
+.expiringDate-list {
+  width: 10vw;
+  text-align: center;
+}
+
+.frozen-list {
+  width: 6vw;
+  font-weight: 600;
+  text-align: center;
+}
+
+.frozenDate-list {
+  width: 10vw;
+  font-weight: 600;
+  text-align: center;
+}
+
+.modify-list {
+  width: 5vw;
+  margin-left: 1vw;
+}
+
+.itemsList {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.newItem {
+  width: 74vw;
+  max-height: 6vh;
+  height: 6vh;
+  font-family: Epilogue;
+  font-size: 20px;
+  line-height: 22px;
+  font-weight: 400;
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding-left: 0;
+  margin: 0;
+}
+
+.newItem:nth-child(odd) {
+  background-color: #ffffff5e
+}
+
+.checkbox-item {
+  width: 6vw;
+  margin-right: 1vw;
+  text-align: center;
+}
+
+.product-item {
+  width: 16vw;
+  text-align: center;
+}
+
+.quantity-item {
+  width: 8vw;
+  text-align: center;
+}
+
+.deliveryDate-item {
+  width: 10vw;
+  text-align: center;
+}
+
+.expiringDate-item {
+  width: 10vw;
+  text-align: center;
+}
+
+.frozen-item {
+  width: 6vw;
+  font-weight: 600;
+  text-align: center;
+}
+
+.frozenDate-item {
+  width: 10vw;
+  font-weight: 600;
+  text-align: center;
+}
+
+.hidden-id {
+  visibility: hidden;
+}
+
+.modify-btn {
+  width: 5vw;
+  margin-left: 1vw;
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4vh;
+  font-family: Inter;
+  font-size: 24px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #FFFFFFFF;
+  background: #00BDD6FF;
+  opacity: 1;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.modify-btn:hover {
+  color: #FFFFFFFF;
+  background: #00A9C0FF;
+}
+
+.listButtons {
+  display: flex;
+  flex-direction: row;
+  width: 74vw;
+  padding-top: 1vh;
+  margin-bottom: 3vh;
+  font-size: 24px;
+}
+
+input::placeholder {
+  font-size: 24px;
+  font-family: Inter;
+  line-height: 22px;
+  font-weight: 400;
+  text-align: center;
+}
+
+.delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4vh;
+  width: 6vw;
+  font-family: Inter;
+  font-size: 24px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #FFFFFFFF;
+  background: #00BDD6FF;
+  opacity: 1;
+  border: none;
+  border-radius: 8px;
+  margin-right: 1vw;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  color: #FFFFFFFF;
+  background: #00A9C0FF;
+}
+
+.product-input {
+  width: 16vw;
+  text-align: center;
+}
+
+.quantity-input {
+  width: 8vw;
+  text-align: center;
+}
+
+.deliveryDate-input {
+  width: 10vw;
+  text-align: center;
+}
+
+.expiringDate-input {
+  width: 10vw;
+  text-align: center;
+}
+
+.frozenCheckbox {
+  width: 6vw;
+  text-align: center;
+}
+
+.frozenDate-input {
+  width: 10vw;
+  text-align: center;
+}
+
+.add-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4vh;
+  width: 5vw;
+  font-family: Inter;
+  font-size: 24px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #FFFFFFFF;
+  background: #00BDD6FF;
+  opacity: 1;
+  border: none;
+  border-radius: 8px;
+  margin-left: 1vw;
+  cursor: pointer;
+}
+
+.add-btn:hover {
+  color: #FFFFFFFF;
+  background: #00A9C0FF;
+}
+
+.activated-modify-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4vh;
+  width: 5vw;
+  font-family: Inter;
+  font-size: 24px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #FFFFFFFF;
+  background: #00BDD6FF;
+  opacity: 1;
+  border: none;
+  border-radius: 8px;
+  margin-left: 1vw;
+  cursor: pointer;
+}
+
+.activated-modify-btn:hover {
+  color: #FFFFFFFF;
+  background: #00A9C0FF;
+}

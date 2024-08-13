@@ -91,8 +91,7 @@
         </div>
 
         <div class="listButtons">
-            <input type="text" class="hidden-id" style="display: none;">
-            <input type="checkbox" class="select-checkbox" style="visibility: hidden;"><button class="delete-btn">Elimina</button>
+            <button class="delete-btn">Elimina</button>
             <input type="text" class="product-input" placeholder="Prodotto" maxlength="110" required>
             <input type="number" class="quantity-input" placeholder="Quantità" required>
             <input type="text" class="deliveryDate-input" placeholder="Data di ricezione" onfocus="(this.type = 'date')"
@@ -104,6 +103,7 @@
                 required>
             <button class="add-btn">Aggiungi</button>
             <button class="activated-modify-btn" id="${id}">Modifica</button>
+            <li class="hidden-id">${id}</li>
         </div>
     </div>
     <script src="script.js"></script>
