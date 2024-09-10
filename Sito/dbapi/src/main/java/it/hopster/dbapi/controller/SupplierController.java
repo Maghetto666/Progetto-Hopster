@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/suppliers")
 @Tag(name = "Gestione fornitori", description = "API di gestione fornitori database Hopster")
 public class SupplierController {

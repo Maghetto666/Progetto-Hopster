@@ -1,18 +1,20 @@
 package it.hopster.dbapi.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDate;
 
-@Entity
+@Entity(name = "Food")
 @Table(name = "foods")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Food {
+public class Food implements Serializable {
     @Id
     @Column(name = "food_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,8 +22,10 @@ public class Food {
     @Column(nullable = false, length = 80)
     private String product;
     private int quantity;
-    private Date deliveryDate;
-    private Date expirationDate;
-    private boolean isFrozen;
-    private Date freezingDate;
+    private LocalDate deliveryDate;
+    private LocalDate expirationDate;
+    @Nullable
+    private Boolean isFrozen;
+    @Nullable
+    private LocalDate freezingDate;
 }

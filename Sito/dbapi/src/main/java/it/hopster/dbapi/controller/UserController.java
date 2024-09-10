@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/users")
 @Tag(name = "Gestione utenti", description = "API di gestione utenti database Hopster")
 public class UserController {

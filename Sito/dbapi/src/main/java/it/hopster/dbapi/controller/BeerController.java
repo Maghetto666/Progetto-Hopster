@@ -18,8 +18,9 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/beers")
-@Tag(name = "Gestione bevande", description = "API di gestione bevande database Hopster")
+@Tag(name = "Gestione birre", description = "API di gestione birre database Hopster")
 public class BeerController {
 
     @Autowired
@@ -28,8 +29,8 @@ public class BeerController {
     private static final Logger logger = LoggerFactory.getLogger(BeerController.class);
 
     @GetMapping
-    @Operation(summary = "Recupera bevande", description = "Recupera tutte le bevande sul database")
-    @ApiResponse(responseCode = "200", description = "Bevande recuperate con successo")
+    @Operation(summary = "Recupera birre", description = "Recupera tutte le birre sul database")
+    @ApiResponse(responseCode = "200", description = "Birre recuperate con successo")
     public List<Beer> getAllBeers() {
         return beerService.getAllBeers();
     }

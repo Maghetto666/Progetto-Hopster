@@ -19,8 +19,9 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/invoices")
-@Tag(name = "Gestione bevande", description = "API di gestione bevande database Hopster")
+@Tag(name = "Gestione fatture", description = "API di gestione fatture database Hopster")
 public class InvoiceController {
 
     @Autowired
@@ -29,8 +30,8 @@ public class InvoiceController {
     private static final Logger logger = LoggerFactory.getLogger(InvoiceController.class);
 
     @GetMapping
-    @Operation(summary = "Recupera bevande", description = "Recupera tutte le bevande sul database")
-    @ApiResponse(responseCode = "200", description = "Bevande recuperate con successo")
+    @Operation(summary = "Recupera fatture", description = "Recupera tutte le fatture sul database")
+    @ApiResponse(responseCode = "200", description = "Fatture recuperate con successo")
     public List<Invoice> getAllInvoices() {
         return invoiceService.getAllInvoices();
     }

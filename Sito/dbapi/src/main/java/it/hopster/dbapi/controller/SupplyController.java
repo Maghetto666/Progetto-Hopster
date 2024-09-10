@@ -19,6 +19,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/supplies")
 @Tag(name = "Gestione prodotti di pulizia e servizio", description = "API di gestione prodotti di pulizia e servizio database Hopster")
 public class SupplyController {

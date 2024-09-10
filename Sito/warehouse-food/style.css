@@ -249,21 +249,8 @@ body {
   background-color: #00A9C0FF;
 }
 
-.listDiv {
-  display: flex;
-  flex-direction: column;
-  background: #F8F9FAFF;
-  border-radius: 6px;
-  border-width: 3px;
-  border-color: #DEE1E6FF;
-  border-style: dashed;
-  width: 75vw;
-  height: 80vh;
-  overflow: auto;
-}
-
 .upperBar {
-  width: 74vw;
+  width: 72vw;
   display: flex;
   flex-direction: row;
   font-family: Epilogue;
@@ -279,47 +266,54 @@ body {
   margin-bottom: 1vh;
 }
 
-.select-list {
-  width: 6vw;
-  margin-right: 1vw;
+.product-upperBar {
+  width: 19vw;
   text-align: center;
 }
 
-.product-list {
-  width: 16vw;
+.quantity-upperBar {
+  width: 9vw;
   text-align: center;
 }
 
-.quantity-list {
+.deliveryDate-upperBar {
+  width: 11vw;
+  text-align: center;
+}
+
+.expiringDate-upperBar {
+  width: 11vw;
+  text-align: center;
+}
+
+.frozen-upperBar {
   width: 8vw;
+  font-weight: 600;
   text-align: center;
 }
 
-.deliveryDate-list {
-  width: 10vw;
+.frozenDate-upperBar {
+  width: 11vw;
+  font-weight: 600;
   text-align: center;
 }
 
-.expiringDate-list {
-  width: 10vw;
-  text-align: center;
-}
-
-.frozen-list {
+.buttons-upperBar {
   width: 6vw;
-  font-weight: 600;
-  text-align: center;
-}
-
-.frozenDate-list {
-  width: 10vw;
-  font-weight: 600;
-  text-align: center;
-}
-
-.modify-list {
-  width: 5vw;
   margin-left: 1vw;
+}
+
+.listDiv {
+  display: flex;
+  flex-direction: column;
+  background: #F8F9FAFF;
+  border-radius: 6px;
+  border-width: 3px;
+  border-color: #DEE1E6FF;
+  border-style: dashed;
+  width: 75vw;
+  height: 80vh;
+  overflow: auto;
 }
 
 .itemsList {
@@ -329,7 +323,7 @@ body {
 }
 
 .newItem {
-  width: 74vw;
+  width: 75vw;
   max-height: 6vh;
   height: 6vh;
   font-family: Epilogue;
@@ -351,14 +345,8 @@ body {
   background-color: #ffffff5e
 }
 
-.checkbox-item {
-  width: 6vw;
-  margin-right: 1vw;
-  text-align: center;
-}
-
 .product-item {
-  width: 16vw;
+  width: 20vw;
   text-align: center;
 }
 
@@ -368,30 +356,35 @@ body {
 }
 
 .deliveryDate-item {
-  width: 10vw;
+  width: 11vw;
   text-align: center;
 }
 
 .expiringDate-item {
-  width: 10vw;
+  width: 11vw;
   text-align: center;
 }
 
 .frozen-item {
-  width: 6vw;
+  width: 8vw;
   font-weight: 600;
   text-align: center;
 }
 
 .frozenDate-item {
-  width: 10vw;
+  width: 11vw;
   font-weight: 600;
   text-align: center;
 }
 
+.modify-item {
+  display: flex;
+  flex-direction: row;
+}
+
 .modify-btn {
-  width: 5vw;
-  margin-left: 1vw;
+  width: 3vw;
+  margin: 0 0 0 0;
   text-align: center;
   display: flex;
   align-items: center;
@@ -414,7 +407,41 @@ body {
   background: #00A9C0FF;
 }
 
-.listButtons {
+.delete-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 4vh;
+  width: 3vw;
+  font-family: Inter;
+  font-size: 24px;
+  line-height: 22px;
+  font-weight: 400;
+  color: #FFFFFFFF;
+  background: #00BDD6FF;
+  opacity: 1;
+  border: none;
+  border-radius: 8px;
+  margin: 0 1vw;
+  cursor: pointer;
+}
+
+.delete-btn:hover {
+  color: #FFFFFFFF;
+  background: #00A9C0FF;
+}
+
+.addBox {
+  display: flex;
+  flex-direction: row;
+  position: absolute;
+  width: 74vw;
+  padding-top: 1vh;
+  margin-bottom: 3vh;
+  font-size: 24px;
+}
+
+.editBox {
   display: flex;
   flex-direction: row;
   width: 74vw;
@@ -429,30 +456,6 @@ input::placeholder {
   line-height: 22px;
   font-weight: 400;
   text-align: center;
-}
-
-.delete-btn {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  height: 4vh;
-  width: 6vw;
-  font-family: Inter;
-  font-size: 24px;
-  line-height: 22px;
-  font-weight: 400;
-  color: #FFFFFFFF;
-  background: #00BDD6FF;
-  opacity: 1;
-  border: none;
-  border-radius: 8px;
-  margin-right: 1vw;
-  cursor: pointer;
-}
-
-.delete-btn:hover {
-  color: #FFFFFFFF;
-  background: #00A9C0FF;
 }
 
 .product-input {
@@ -485,12 +488,42 @@ input::placeholder {
   text-align: center;
 }
 
+.editNewProduct {
+  width: 16vw;
+  text-align: center;
+}
+
+.editNewQuantity {
+  width: 8vw;
+  text-align: center;
+}
+
+.editNewDeliveryDate {
+  width: 10vw;
+  text-align: center;
+}
+
+.editNewExpiringDate {
+  width: 10vw;
+  text-align: center;
+}
+
+.editNewFrozenCheckBox {
+  width: 6vw;
+  text-align: center;
+}
+
+.editNewFreezingDate {
+  width: 10vw;
+  text-align: center;
+}
+
 .add-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 4vh;
-  width: 5vw;
+  width: 3vw;
   font-family: Inter;
   font-size: 24px;
   line-height: 22px;
@@ -509,12 +542,12 @@ input::placeholder {
   background: #00A9C0FF;
 }
 
-.activated-modify-btn {
+.edit-btn {
   display: flex;
   align-items: center;
   justify-content: center;
   height: 4vh;
-  width: 5vw;
+  width: 3vw;
   font-family: Inter;
   font-size: 24px;
   line-height: 22px;
@@ -528,7 +561,8 @@ input::placeholder {
   cursor: pointer;
 }
 
-.activated-modify-btn:hover {
+.edit-btn:hover {
   color: #FFFFFFFF;
   background: #00A9C0FF;
 }
+

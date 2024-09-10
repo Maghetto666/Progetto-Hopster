@@ -1,4 +1,4 @@
-// Upper buttons and icons
+// Sidebar upper buttons and icons
 const warehouse_icon = document.querySelector('.warehouse-icon');
 const suppliers_icon = document.querySelector('.suppliers-icon');
 const invoices_icon = document.querySelector('.invoices-icon');
@@ -6,7 +6,7 @@ const warehouse_btn = document.querySelector('.warehouse-btn');
 const suppliers_btn = document.querySelector('.suppliers-btn');
 const invoices_btn = document.querySelector('.invoices-btn');
 
-// Bottom buttons and icons
+// Sidebar bottom buttons and icons
 const foods_icon = document.querySelector('.foods-icon');
 const drinks_icon = document.querySelector('.drinks-icon');
 const beers_icon = document.querySelector('.beers-icon');
@@ -17,122 +17,47 @@ const beers_btn = document.querySelector('.beers-btn');
 const supplies_btn = document.querySelector('.supplies-btn');
 const itemsList = document.querySelector('.itemsList');
 
-// Input fields
+// Add box input fields
 const product_input = document.querySelector('.product-input');
 const quantity_input = document.querySelector('.quantity-input');
 const deliveryDate_input = document.querySelector('.deliveryDate-input');
 const expiringDate_input = document.querySelector('.expiringDate-input');
 const frozenCheckbox = document.querySelector('.frozenCheckbox');
 const frozenDate_input = document.querySelector('.frozenDate-input');
-const hidden_id = document.querySelector('.hidden-id');
 frozenDate_input.disabled = true;
+
+// Edit box input fields
+const editNewProduct = document.querySelector('.editNewProduct');
+const editNewQuantity = document.querySelector('.editNewQuantity');
+const editNewDeliveryDate = document.querySelector('.editNewDeliveryDate');
+const editNewExpiringDate = document.querySelector('.editNewExpiringDate');
+const editNewFrozenCheckBox = document.querySelector('.editNewFrozenCheckBox');
+const editNewFreezingDate = document.querySelector('.editNewFreezingDate');
+editNewFrozenCheckBox.disabled = true;
 
 // Main page buttons
 const add_btn = document.querySelector('.add-btn');
-const delete_btn = document.querySelector('.delete-btn');
-const activated_modify_btn = document.querySelector('.activated-modify-btn');
+const delete_btn = document.querySelectorAll('delete-btn');
+
+// Add and edit boxes starters
+const addBox = document.querySelector('.addBox');
+const editBox = document.querySelector('.editBox');
+editBox.style.visibility = "hidden";
 
 // Starters
-activated_modify_btn.style.display = "none";
-const STORAGE_KEY = 'foods-key';
-let products = JSON.parse(localStorage.getItem(STORAGE_KEY)) || [];
-let newArray = [];
-showContent();
+let modify_id = 0;
+let products = [];
+fetchFoods();
 
-// Toggle the frozen date checkbox
-frozenCheckbox.addEventListener('click', function () {
-    if (frozenDate_input.disabled == true) {
-        frozenDate_input.disabled = false;
-    } else {
-        frozenDate_input.disabled = true;
-    }
-});
+// Fetches data from the db
+async function fetchFoods() {
+    // Calls the API and put data into an array
+    const apiUrl = 'http://localhost:8080/foods';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    products = data;
 
-// Add a new item to the list and to the local storage
-add_btn.addEventListener('click', function () {
-
-    // gets the parameters from the inputs
-    let selected = false;
-    let product = product_input.value.trim();
-    let quantity = quantity_input.value;
-    let deliveryDate = deliveryDate_input.value;
-    let expiringDate = expiringDate_input.value;
-    let frozenChecked = frozenCheckbox.checked;
-    let frozenDate = frozenDate_input.value;
-    let itemID = products.length;
-
-    // puts the parameters into a new object 
-    itemToAdd = {
-        selected: selected,
-        product: product,
-        quantity: quantity,
-        deliverDate: deliveryDate,
-        expiringDate: expiringDate,
-        frozenChecked: frozenChecked,
-        frozenDate: frozenDate,
-        itemID: itemID
-    }
-
-    // checks if the frozen date checkbox is active or not
-    if (frozenCheckbox.checked == true) {
-
-        // puts a required label on the frozen date input in case
-        frozenDate_input.required = true;
-
-        // checks if every fields is compiled
-        if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0 || frozenDate == 0) {
-            return;
-        } else {
-            // adds the new item to the list and to the local storage
-            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, frozenChecked, frozenDate, itemID);
-            itemsList.innerHTML += template;
-            products.push(itemToAdd);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-        }
-    } else {
-        frozenDate_input.required = false;
-        if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0) {
-            return;
-        } else {
-            const template = buildTemplateHTML(product, quantity, deliveryDate, expiringDate, frozenChecked, frozenDate, itemID);
-            itemsList.innerHTML += template;
-            products.push(itemToAdd);
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-        }
-    }
-
-    product_input.value = "";
-    quantity_input.value = "";
-    deliveryDate_input.value = "";
-    expiringDate_input.value = "";
-    frozenCheckbox.checked = false;
-    frozenDate_input.value = "";
-    frozenDate_input.disabled = true;
-
-    // updates the list
-    showContent();
-});
-
-// Delete the selected items from list and local storage    TODO deletes half items if multiple choices are activated
-delete_btn.addEventListener('click', function () {
-    const newItems = document.querySelectorAll('.newItem');
-    newItems.forEach((item) => {
-        let i = item.id;
-        if (products[i].selected === true) {
-            if (i > -1) {
-                products.splice(i, 1);
-            }
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
-        } else {
-            return;
-        };
-        showContent();
-    })
-})
-
-// Updates the list content
-function showContent() {
-
+    // Updates the list
     itemsList.innerHTML = '';
     product_input.value = "";
     quantity_input.value = "";
@@ -142,143 +67,426 @@ function showContent() {
     frozenDate_input.value = "";
     frozenDate_input.disabled = true;
 
-    products.forEach((product, index) => {
-        const template = buildTemplateHTML(product.product,
+    editNewProduct.value = "";
+    editNewQuantity.value = "";
+    editNewDeliveryDate.value = "";
+    editNewExpiringDate.value = "";
+    editNewFrozenCheckBox.checked = false;
+    editNewFreezingDate.value = "";
+    editNewFreezingDate.disabled = true;
+
+    
+
+    products.forEach((product) => {
+        let dDateToFormat = new Date(product.deliveryDate);
+        let dDate = stringToDate(dDateToFormat);
+        let eDateToFormat = new Date(product.expirationDate);
+        let eDate = stringToDate(eDateToFormat);
+        let FDateToFormat = new Date(product.freezingDate);
+        let FDate = stringToDate(FDateToFormat);
+        const template = buildTemplateHTML(
+            product.id,
+            product.product,
             product.quantity,
-            product.deliverDate,
-            product.expiringDate,
-            product.checked,
-            product.frozenDate,
-            index
+            dDate,
+            eDate,
+            product.isFrozen,
+            FDate
         );
         itemsList.innerHTML += template;
     });
+    activateDeleteButtons();
+    activateModifyButtons()
 
-    const selectCheckbox = document.querySelectorAll('.select-checkbox');
-    selectCheckbox.forEach((checkbox) => {
-        checkbox.addEventListener('change', function () {
-            let itemid = checkbox.id;
-            if (checkbox.checked) {
-                products[itemid].selected = true;
-            } else {
-                products[itemid].selected = false;
-            }
+}
+
+// Toggle the frozen date checkbox
+frozenCheckbox.addEventListener('click', function () {
+    if (frozenDate_input.disabled == true) {
+        frozenDate_input.disabled = false;
+    } else {
+        frozenDate_input.disabled = true;
+        frozenDate_input.value = null;
+    }
+});
+
+// Toggle the frozen date checkbox
+editNewFrozenCheckBox.addEventListener('click', function () {
+
+    if (editNewFreezingDate.disabled == true) {
+        editNewFreezingDate.disabled = false;
+        editNewFreezingDate.value = oldDate;
+    } else {
+        editNewFreezingDate.disabled = true;
+        editNewFreezingDate.value = null;
+    }
+});
+
+function stringToDate(dateToFormat) {
+    const yyyy = dateToFormat.getFullYear();
+    let mm = dateToFormat.getMonth() + 1;
+    let dd = dateToFormat.getDate();
+
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+
+    const formattedDay = dd + '/' + mm + '/' + yyyy;
+    return formattedDay;
+}
+
+// Add a new item to the list and to the local storage
+add_btn.addEventListener('click', function () {
+
+    // gets the parameters from the inputs
+    let product = product_input.value.trim();
+    let quantity = quantity_input.value;
+    let deliveryDate = deliveryDate_input.value;
+    let expiringDate = expiringDate_input.value;
+    let frozenChecked = frozenCheckbox.checked;
+    let frozenDate = frozenDate_input.value;
+
+    // puts the parameters into a new object 
+    let itemToAdd = {
+        product: product,
+        quantity: quantity,
+        deliveryDate: deliveryDate,
+        expirationDate: expiringDate,
+        frozen: frozenChecked,
+        freezingDate: frozenDate
+    }
+
+    // checks if the frozen date checkbox is active or not
+    if (frozenCheckbox.checked == true) {
+
+        // puts a required label on the frozen date input in case
+        frozenDate_input.required = true;
+
+        // checks if every field is compiled
+        if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0 || frozenDate == 0) {
+            return;
+        } else {
+            addToDB(itemToAdd);
+        }
+    } else {
+        frozenDate_input.required = false;
+        if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0) {
+            return;
+        } else {
+            addToDB(itemToAdd);
+        }
+    }
+});
+
+async function addToDB(itemToAdd) {
+    const response = await fetch('http://localhost:8080/foods', {
+        method: 'POST',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            product: itemToAdd.product,
+            quantity: itemToAdd.quantity,
+            deliveryDate: itemToAdd.deliveryDate,
+            expirationDate: itemToAdd.expirationDate,
+            isFrozen: itemToAdd.frozen,
+            freezingDate: itemToAdd.freezingDate
         })
     });
 
-    const modify_btn = document.querySelectorAll('.modify-btn');
-    // Modifies the selected item TO FIX
-    // add event listener to every modify buttons in the list
-    for (let i = 0; i < modify_btn.length; i++) {
-        modify_btn[i].addEventListener('click', function () {
-
-            // hides the add button and the modify buttons in the list and reveals the activated modify button
-            for (let i = 0; i < modify_btn.length; i++) {
-                modify_btn[i].style.visibility = "hidden";
-            }
-            activated_modify_btn.style.display = "block";
-            add_btn.style.display = "none";
-
-            // gets the item to modify by getting the ID from the button which has the same as the item
-            let id = modify_btn[i].id;
-            let itemToModify = products[id];
-
-            // copies the item values into the inputs
-            product_input.value = itemToModify.product;
-            quantity_input.value = itemToModify.quantity;
-            deliveryDate_input.value = itemToModify.deliverDate;
-            expiringDate_input.value = itemToModify.expiringDate;
-            frozenCheckbox.checked = itemToModify.checked;
-            frozenDate_input.value = itemToModify.frozenDate;
-            if (frozenCheckbox === true) {
-                frozenDate_input.disabled = false;
-            } else {
-                frozenDate_input.disabled = true;
-            }
-            hidden_id.value = id;
-        });
-    }
+    fetchFoods();
 }
 
-// add event listener to the activated modify button to change the object in the array
-activated_modify_btn.addEventListener('click', function () {
+// Delete the selected items from list
+function activateDeleteButtons() {
+    const checks = document.querySelectorAll('.delete-btn');
 
-    // new variables to put inside a new object
-    let modifiedproduct = product_input.value;
-    let modifiedquantity = quantity_input.value;
-    let modifieddeliveryDate = deliveryDate_input.value;
-    let modifiedexpiringDate = expiringDate_input.value;
-    let modifiedchecked = frozenCheckbox.checked;
-    let modifiedfrozenDate = frozenDate_input.value;
-    let id = hidden_id.value;
+    for (let i = 0; i < checks.length; i++) {
+        checks[i].addEventListener('click', function () {
+            let id = checks[i].id;
+            deleteFood(id);
+        });
+    };
+}
 
-    // the new object with the new variables
-    let modifiedItem = {
-        product: modifiedproduct,
-        quantity: modifiedquantity,
-        deliverDate: modifieddeliveryDate,
-        expiringDate: modifiedexpiringDate,
-        checked: modifiedchecked,
-        frozenDate: modifiedfrozenDate,
-        id: id
+async function deleteFood(id) {
+    await fetch(`http://localhost:8080/foods/${id}`, {
+        method: 'DELETE'
+    });
+    fetchFoods();
+}
+
+function activateModifyButtons() {
+    const checks = document.querySelectorAll('.modify-btn');
+    for (let i = 0; i < checks.length; i++) {
+        checks[i].addEventListener('click', function () {
+            let id = checks[i].id;
+
+            editBox.style.visibility = "visible";
+            addBox.style.visibility = "hidden";
+            checks.forEach((check) => check.style.visibility = "hidden");
+            checks[i].style.visibility = "visible";
+
+            fillEditFields(id);
+            modify_id = id;
+        });
+
+    };
+
+}
+
+async function fillEditFields(id) {
+    const response = await fetch(`http://localhost:8080/foods/${id}`);
+    const data = await response.json();
+
+    editNewProduct.value = data.product;
+    editNewQuantity.value = data.quantity;
+    editNewDeliveryDate.value = data.deliveryDate;
+    editNewExpiringDate.value = data.expirationDate;
+    editNewFrozenCheckBox.disabled = false;
+    if (data.isFrozen == true) {
+        editNewFrozenCheckBox.value = true;
+        editNewFrozenCheckBox.checked = true;
+    } else {
+        editNewFrozenCheckBox.value = false;
+        editNewFrozenCheckBox.checked = false;
     }
+    editNewFreezingDate.value = data.freezingDate;
+}
 
-    // if the new item has the same id as the selected product
-    console.log(products);
-
-    for (let count = 0; products.length; count++) {
-
-        if (products[count] === modifiedItem.id) {
-            products.splice(products[count], 1, modifiedItem);
-        }
-        else {
-            return;
-        }
+async function modifyFood() {
+    let itemToModify = {
+        product: editNewProduct.value,
+        quantity: editNewQuantity.value,
+        deliveryDate: editNewDeliveryDate.value,
+        expirationDate: editNewExpiringDate.value,
+        frozen: editNewFrozenCheckBox.value,
+        freezingDate: editNewFreezingDate.value
     }
-    console.log(products);
+    editBox.style.visibility = "hidden";
+    addBox.style.visibility = "visible";
 
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(products));
+    await fetch(`http://localhost:8080/foods/${modify_id}`, {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+            product: itemToModify.product,
+            quantity: itemToModify.quantity,
+            deliveryDate: itemToModify.deliveryDate,
+            expirationDate: itemToModify.expirationDate,
+            isFrozen: itemToModify.frozen,
+            freezingDate: itemToModify.freezingDate
+        })
+    });
 
-    // shows again the add button and the modify buttons, hides the activated modify button
-    activated_modify_btn.style.display = "none";
-    add_btn.style.display = "block";
-    for (let i = 0; i < modify_btn.length; i++) {
-        modify_btn[i].style.visibility = "visible";
-    }
-    showContent();
-});
+    const checks = document.querySelectorAll('.modify-btn');
+    for (let i = 0; i < checks.length; i++) {
+        document.getElementsByClassName("modify-btn")[i].style.visibility = "visible";
+    };
+
+    fetchFoods();
+}
 
 // Creates HTML to add a new item in the list
-function buildTemplateHTML(typedProduct, typedQuantity, typedDeliveryDate, typedExpiringDate, checked, typedFrozenDate, id) {
+function buildTemplateHTML(id, product, quantity, deliverDate, expiringDate, isFrozen, frozenDate) {
 
-    if (checked == true) {
+    if (isFrozen == true) {
         frozenDate_input.required = true;
         return `
-                <ul class="newItem" id="${id}">
-                    <li class="checkbox-item" id="${id}"><input type="checkbox" class="select-checkbox" id="${id}"></li>
-                    <li class="product-item" id="${id}">${typedProduct}</li>
-                    <li class="quantity-item" id="${id}">${typedQuantity}</li>
-                    <li class="deliveryDate-item" id="${id}">${typedDeliveryDate}</li>
-                    <li class="expiringDate-item" id="${id}">${typedExpiringDate}</li>
-                    <li class="frozen-item" id="${id}"><input type="checkbox" class="frozen-checkbox" checked disabled></li>
-                    <li class="frozenDate-item" id="${id}">${typedFrozenDate}</li>
-                    <li class="modify-item"><button class="modify-btn" id="${id}">Modifica</button></li>
+                <ul class="newItem">
+                    <li class="product-item">${product}</li>
+                    <li class="quantity-item">${quantity}</li>
+                    <li class="deliveryDate-item">${deliverDate}</li>
+                    <li class="expiringDate-item">${expiringDate}</li>
+                    <li class="frozen-item"><input type="checkbox" class="frozen-checkbox" checked disabled></li>
+                    <li class="frozenDate-item">${frozenDate}</li>
+                    <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
                 </ul>
     `
     } else {
         return `
-                <ul class="newItem" id="${id}">
-                    <li class="checkbox-item" id="${id}"><input type="checkbox" class="select-checkbox" id="${id}"></li>
-                    <li class="product-item" id="${id}">${typedProduct}</li>
-                    <li class="quantity-item" id="${id}">${typedQuantity}</li>
-                    <li class="deliveryDate-item" id="${id}">${typedDeliveryDate}</li>
-                    <li class="expiringDate-item" id="${id}">${typedExpiringDate}</li>
-                    <li class="frozen-item" id="${id}"><input type="checkbox" class="frozen-checkbox" disabled></li>
-                    <li class="frozenDate-item" id="${id}" disabled></li>
-                    <li class="modify-item"><button class="modify-btn" id="${id}">Modifica</button></li>
+                <ul class="newItem">
+                    <li class="product-item">${product}</li>
+                    <li class="quantity-item">${quantity}</li>
+                    <li class="deliveryDate-item">${deliverDate}</li>
+                    <li class="expiringDate-item">${expiringDate}</li>
+                    <li class="frozen-item"><input type="checkbox" class="frozen-checkbox" disabled></li>
+                    <li class="frozenDate-item" disabled></li>
+                    <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
                 </ul>
     `
     }
+}
+// Fetches data from the db ordered by product
+async function orderByProduct() {
+    
+    // Updates the list
+    itemsList.innerHTML = '';
+
+    // Calls the API and put data into an array
+    const apiUrl = 'http://localhost:8080/foods/orderbyproduct';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    products = data;
+    console.log(products);
+
+    products.forEach((product) => {
+        let dDateToFormat = new Date(product.deliveryDate);
+        let dDate = stringToDate(dDateToFormat);
+        let eDateToFormat = new Date(product.expirationDate);
+        let eDate = stringToDate(eDateToFormat);
+        let FDateToFormat = new Date(product.freezingDate);
+        let FDate = stringToDate(FDateToFormat);
+        const template = buildTemplateHTML(
+            product.id,
+            product.product,
+            product.quantity,
+            dDate,
+            eDate,
+            product.isFrozen,
+            FDate
+        );
+        itemsList.innerHTML += template;
+    });
+    activateDeleteButtons();
+    activateModifyButtons()
+}
+
+// Fetches data from the db ordered by quantity
+async function orderByQuantity() {
+
+    // Updates the list
+    itemsList.innerHTML = '';
+    
+    // Calls the API and put data into an array
+    const apiUrl = 'http://localhost:8080/foods/orderbyquantity';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    products = data;
+
+    products.forEach((product) => {
+        let dDateToFormat = new Date(product.deliveryDate);
+        let dDate = stringToDate(dDateToFormat);
+        let eDateToFormat = new Date(product.expirationDate);
+        let eDate = stringToDate(eDateToFormat);
+        let FDateToFormat = new Date(product.freezingDate);
+        let FDate = stringToDate(FDateToFormat);
+        const template = buildTemplateHTML(
+            product.id,
+            product.product,
+            product.quantity,
+            dDate,
+            eDate,
+            product.isFrozen,
+            FDate
+        );
+        itemsList.innerHTML += template;
+    });
+    activateDeleteButtons();
+    activateModifyButtons()
+}
+
+// Fetches data from the db ordered by delivery date
+async function orderByDeliveryDate() {
+
+    // Updates the list
+    itemsList.innerHTML = '';
+    
+    // Calls the API and put data into an array
+    const apiUrl = 'http://localhost:8080/foods/orderbydeliverydate';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    products = data;
+
+    products.forEach((product) => {
+        let dDateToFormat = new Date(product.deliveryDate);
+        let dDate = stringToDate(dDateToFormat);
+        let eDateToFormat = new Date(product.expirationDate);
+        let eDate = stringToDate(eDateToFormat);
+        let FDateToFormat = new Date(product.freezingDate);
+        let FDate = stringToDate(FDateToFormat);
+        const template = buildTemplateHTML(
+            product.id,
+            product.product,
+            product.quantity,
+            dDate,
+            eDate,
+            product.isFrozen,
+            FDate
+        );
+        itemsList.innerHTML += template;
+    });
+    activateDeleteButtons();
+    activateModifyButtons()
+}
+// Fetches data from the db ordered by expiring date
+async function orderByExpiringDate() {
+    
+    // Updates the list
+    itemsList.innerHTML = '';
+    
+    // Calls the API and put data into an array
+    const apiUrl = 'http://localhost:8080/foods/orderbyexpiringdate';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    products = data;
+
+    products.forEach((product) => {
+        let dDateToFormat = new Date(product.deliveryDate);
+        let dDate = stringToDate(dDateToFormat);
+        let eDateToFormat = new Date(product.expirationDate);
+        let eDate = stringToDate(eDateToFormat);
+        let FDateToFormat = new Date(product.freezingDate);
+        let FDate = stringToDate(FDateToFormat);
+        const template = buildTemplateHTML(
+            product.id,
+            product.product,
+            product.quantity,
+            dDate,
+            eDate,
+            product.isFrozen,
+            FDate
+        );
+        itemsList.innerHTML += template;
+    });
+    activateDeleteButtons();
+    activateModifyButtons()
+}
+// Fetches data from the db ordered by freezing date
+async function orderByFreezingDate() {
+    
+    // Updates the list
+    itemsList.innerHTML = '';
+    
+    // Calls the API and put data into an array
+    const apiUrl = 'http://localhost:8080/foods/orderbyfreezingdate';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    products = data;
+
+    products.forEach((product) => {
+        let dDateToFormat = new Date(product.deliveryDate);
+        let dDate = stringToDate(dDateToFormat);
+        let eDateToFormat = new Date(product.expirationDate);
+        let eDate = stringToDate(eDateToFormat);
+        let FDateToFormat = new Date(product.freezingDate);
+        let FDate = stringToDate(FDateToFormat);
+        const template = buildTemplateHTML(
+            product.id,
+            product.product,
+            product.quantity,
+            dDate,
+            eDate,
+            product.isFrozen,
+            FDate
+        );
+        itemsList.innerHTML += template;
+    });
+    activateDeleteButtons();
+    activateModifyButtons()
 }
 
 // Mouseover and mouseout functions

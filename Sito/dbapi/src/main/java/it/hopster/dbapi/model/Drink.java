@@ -5,14 +5,15 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.io.Serializable;
 import java.util.Date;
 
-@Entity
+@Entity(name = "Drink")
 @Table(name = "drinks")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Drink {
+public class Drink implements Serializable {
     @Id
     @Column(name = "drink_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

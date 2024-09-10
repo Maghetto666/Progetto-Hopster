@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/drinks")
 @Tag(name = "Gestione bevande", description = "API di gestione bevande database Hopster")
 public class DrinkController {

@@ -14,16 +14,17 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 @RequestMapping("/foods")
 @Tag(name = "Gestione alimenti", description = "API di gestione alimenti database Hopster")
 public class FoodController {
 
     @Autowired
-    FoodService foodService;
+    FoodService foodService = new FoodService();
 
     private static final Logger logger = LoggerFactory.getLogger(FoodController.class);
 
@@ -32,6 +33,41 @@ public class FoodController {
     @ApiResponse(responseCode = "200", description = "Alimenti recuperati con successo")
     public List<Food> getAllFoods() {
         return foodService.getAllFoods();
+    }
+
+    @GetMapping("/orderbyproduct")
+    @Operation(summary = "Recupera alimenti ordinati per prodotto", description = "Recupera tutti gli alimenti sul database ordinati per prodotto")
+    @ApiResponse(responseCode = "200", description = "Alimenti recuperati con successo")
+    public List<Food> getAllFoodsOrderByProduct() {
+        return foodService.getAllFoodsOrderByProduct();
+    }
+
+    @GetMapping("/orderbyquantity")
+    @Operation(summary = "Recupera alimenti ordinati per quantità", description = "Recupera tutti gli alimenti sul database ordinati per quantità")
+    @ApiResponse(responseCode = "200", description = "Alimenti recuperati con successo")
+    public List<Food> getAllFoodsOrderByQuantity() {
+        return foodService.getAllFoodsOrderByQuantity();
+    }
+
+    @GetMapping("/orderbydeliverydate")
+    @Operation(summary = "Recupera alimenti ordinati per data di consegna", description = "Recupera tutti gli alimenti sul database ordinati per data di consegna")
+    @ApiResponse(responseCode = "200", description = "Alimenti recuperati con successo")
+    public List<Food> getAllFoodsOrderByDeliveryDate() {
+        return foodService.getAllFoodsOrderByDeliveryDate();
+    }
+
+    @GetMapping("/orderbyexpiringdate")
+    @Operation(summary = "Recupera alimenti ordinati per data di scadenza", description = "Recupera tutti gli alimenti sul database ordinati per data di scadenza")
+    @ApiResponse(responseCode = "200", description = "Alimenti recuperati con successo")
+    public List<Food> getAllFoodsOrderByExpiringDate() {
+        return foodService.getAllFoodsOrderByExpirationDate();
+    }
+
+    @GetMapping("/orderbyfreezingdate")
+    @Operation(summary = "Recupera alimenti ordinati per data di congelamento", description = "Recupera tutti gli alimenti sul database ordinati per data di congelamento")
+    @ApiResponse(responseCode = "200", description = "Alimenti recuperati con successo")
+    public List<Food> getAllFoodsOrderByFreezingDate() {
+        return foodService.getAllFoodsOrderByFreezingDate();
     }
 
     @GetMapping("/{id}")
@@ -52,36 +88,44 @@ public class FoodController {
     @PostMapping
     @Operation(summary = "Aggiunge un alimento", description = "Aggiunge un nuovo alimento sul database")
     @ApiResponse(responseCode = "200", description = "Alimento aggiunto con successo")
-    public ResponseEntity<Food> createFood(
-            @RequestParam String product,
-            @RequestParam int quantity,
-            @RequestParam Date deliveryDate,
-            @RequestParam Date expirationDate,
-            @RequestParam boolean isFrozen,
-            @RequestParam Date freezingDate
-    ) {
-        Food newFood = foodService.createFood(
-                product, quantity, deliveryDate, expirationDate, isFrozen, freezingDate);
+    public ResponseEntity<Food> createFood(@RequestBody Food food) {
+        Food newFood = new Food();
+        newFood.setProduct(food.getProduct());
+        newFood.setQuantity(food.getQuantity());
+        newFood.setDeliveryDate(food.getDeliveryDate());
+        newFood.setExpirationDate(food.getExpirationDate());
+        newFood.setIsFrozen(food.getIsFrozen());
+        newFood.setFreezingDate(food.getFreezingDate());
+        foodService.createFood(newFood);
         return ResponseEntity.status(HttpStatus.CREATED).body(newFood);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Modifica dettagli alimento", description = "Modifica i dettagli di un alimento trovato tramite id")
     @ApiResponse(responseCode = "200", description = "Alimento modificato con successo")
-    public Food updateFood(@PathVariable Long id,
-                           @RequestParam String product,
-                           @RequestParam int quantity,
-                           @RequestParam Date deliveryDate,
-                           @RequestParam Date expirationDate,
-                           @RequestParam boolean isFrozen,
-                           @RequestParam Date freezingDate
+    public ResponseEntity<Food> updateFood(@PathVariable Long id,
+                                           /* @RequestBody String product,
+                                           @RequestBody int quantity,
+                                           @RequestBody LocalDate deliveryDate,
+                                           @RequestBody LocalDate expirationDate,
+                                           @RequestBody Boolean isFrozen,
+                                           @RequestBody LocalDate freezingDate*/
+        @RequestBody Food food
     ) {
-        Food updatedFood = foodService.updateFood(product, quantity, deliveryDate, expirationDate, isFrozen, freezingDate);
-        if (updatedFood == null) {
-            logger.error("Alimento non trovato con quell'id");
-            throw new FoodNotFoundException("Food not found with id: " + id);
+        Food updatedFood = foodService.getFoodById(id);
+        if (updatedFood != null) {
+            updatedFood.setProduct(food.getProduct());
+            updatedFood.setQuantity(food.getQuantity());
+            updatedFood.setDeliveryDate(food.getDeliveryDate());
+            updatedFood.setExpirationDate(food.getExpirationDate());
+            updatedFood.setIsFrozen(food.getIsFrozen());
+            updatedFood.setFreezingDate(food.getFreezingDate());
+            foodService.updateFood(updatedFood);
+            return ResponseEntity.status(HttpStatus.OK).body(updatedFood);
+
         } else {
-            return updatedFood;
+            logger.error("Alimento non trovato con quell'id");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
