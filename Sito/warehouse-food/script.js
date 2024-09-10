@@ -113,9 +113,8 @@ frozenCheckbox.addEventListener('click', function () {
 // Toggle the frozen date checkbox
 editNewFrozenCheckBox.addEventListener('click', function () {
 
-    if (editNewFreezingDate.disabled == true) {
+    if (editNewFrozenCheckBox.checked == true) {
         editNewFreezingDate.disabled = false;
-        editNewFreezingDate.value = oldDate;
     } else {
         editNewFreezingDate.disabled = true;
         editNewFreezingDate.value = null;
@@ -247,9 +246,11 @@ async function fillEditFields(id) {
     if (data.isFrozen == true) {
         editNewFrozenCheckBox.value = true;
         editNewFrozenCheckBox.checked = true;
+        editNewFreezingDate.disabled = false;
     } else {
         editNewFrozenCheckBox.value = false;
         editNewFrozenCheckBox.checked = false;
+        editNewFreezingDate.disabled = true;
     }
     editNewFreezingDate.value = data.freezingDate;
 }
