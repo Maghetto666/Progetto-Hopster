@@ -104,22 +104,22 @@ public class FoodController {
     @Operation(summary = "Modifica dettagli alimento", description = "Modifica i dettagli di un alimento trovato tramite id")
     @ApiResponse(responseCode = "200", description = "Alimento modificato con successo")
     public ResponseEntity<Food> updateFood(@PathVariable Long id,
-                                           /* @RequestBody String product,
+                                            @RequestBody String product,
                                            @RequestBody int quantity,
                                            @RequestBody LocalDate deliveryDate,
                                            @RequestBody LocalDate expirationDate,
                                            @RequestBody Boolean isFrozen,
-                                           @RequestBody LocalDate freezingDate*/
-        @RequestBody Food food
+                                           @RequestBody LocalDate freezingDate
+        //@RequestBody Food food
     ) {
         Food updatedFood = foodService.getFoodById(id);
         if (updatedFood != null) {
-            updatedFood.setProduct(food.getProduct());
-            updatedFood.setQuantity(food.getQuantity());
-            updatedFood.setDeliveryDate(food.getDeliveryDate());
-            updatedFood.setExpirationDate(food.getExpirationDate());
-            updatedFood.setIsFrozen(food.getIsFrozen());
-            updatedFood.setFreezingDate(food.getFreezingDate());
+            updatedFood.setProduct(product);
+            updatedFood.setQuantity(quantity);
+            updatedFood.setDeliveryDate(deliveryDate);
+            updatedFood.setExpirationDate(expirationDate);
+            updatedFood.setIsFrozen(isFrozen);
+            updatedFood.setFreezingDate(freezingDate);
             foodService.updateFood(updatedFood);
             return ResponseEntity.status(HttpStatus.OK).body(updatedFood);
 

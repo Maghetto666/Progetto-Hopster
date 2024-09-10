@@ -75,7 +75,7 @@ async function fetchFoods() {
     editNewFreezingDate.value = "";
     editNewFreezingDate.disabled = true;
 
-    
+
 
     products.forEach((product) => {
         let dDateToFormat = new Date(product.deliveryDate);
@@ -97,6 +97,29 @@ async function fetchFoods() {
     });
     activateDeleteButtons();
     activateModifyButtons()
+    showAlarms()
+}
+
+function showAlarms() {
+    let today = new Date();
+    let limit = 2 * 24 * 60 * 60 * 1000;
+
+    // Shows alarm if the expiration time is close to 2 days
+    products.forEach(item => {
+        date = new Date(item.expirationDate);
+        if (date - today < limit) {
+            const element = document.getElementById(item.id).querySelector('.toExpire');
+            element.style.color = 'red';
+        }
+    })
+
+    // Shows alarm if quantity is 5 or less
+    products.forEach(item => {
+        if (item.quantity <= 5) {
+            const element = document.getElementById(`${item.id}`).querySelector('.toFinish');
+            element.style.color = 'red';
+        }
+    })
 
 }
 
@@ -297,11 +320,11 @@ function buildTemplateHTML(id, product, quantity, deliverDate, expiringDate, isF
     if (isFrozen == true) {
         frozenDate_input.required = true;
         return `
-                <ul class="newItem">
+                <ul class="newItem" id=${id}>
                     <li class="product-item">${product}</li>
-                    <li class="quantity-item">${quantity}</li>
+                    <li class="quantity-item toFinish">${quantity}</li>
                     <li class="deliveryDate-item">${deliverDate}</li>
-                    <li class="expiringDate-item">${expiringDate}</li>
+                    <li class="expiringDate-item toExpire">${expiringDate}</li>
                     <li class="frozen-item"><input type="checkbox" class="frozen-checkbox" checked disabled></li>
                     <li class="frozenDate-item">${frozenDate}</li>
                     <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
@@ -309,11 +332,11 @@ function buildTemplateHTML(id, product, quantity, deliverDate, expiringDate, isF
     `
     } else {
         return `
-                <ul class="newItem">
+                <ul class="newItem" id=${id}>
                     <li class="product-item">${product}</li>
-                    <li class="quantity-item">${quantity}</li>
+                    <li class="quantity-item toFinish">${quantity}</li>
                     <li class="deliveryDate-item">${deliverDate}</li>
-                    <li class="expiringDate-item">${expiringDate}</li>
+                    <li class="expiringDate-item toExpire">${expiringDate}</li>
                     <li class="frozen-item"><input type="checkbox" class="frozen-checkbox" disabled></li>
                     <li class="frozenDate-item" disabled></li>
                     <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
@@ -323,7 +346,7 @@ function buildTemplateHTML(id, product, quantity, deliverDate, expiringDate, isF
 }
 // Fetches data from the db ordered by product
 async function orderByProduct() {
-    
+
     // Updates the list
     itemsList.innerHTML = '';
 
@@ -353,7 +376,8 @@ async function orderByProduct() {
         itemsList.innerHTML += template;
     });
     activateDeleteButtons();
-    activateModifyButtons()
+    activateModifyButtons();
+    showAlarms();
 }
 
 // Fetches data from the db ordered by quantity
@@ -361,7 +385,7 @@ async function orderByQuantity() {
 
     // Updates the list
     itemsList.innerHTML = '';
-    
+
     // Calls the API and put data into an array
     const apiUrl = 'http://localhost:8080/foods/orderbyquantity';
     const response = await fetch(apiUrl);
@@ -387,7 +411,8 @@ async function orderByQuantity() {
         itemsList.innerHTML += template;
     });
     activateDeleteButtons();
-    activateModifyButtons()
+    activateModifyButtons();
+    showAlarms();
 }
 
 // Fetches data from the db ordered by delivery date
@@ -395,7 +420,7 @@ async function orderByDeliveryDate() {
 
     // Updates the list
     itemsList.innerHTML = '';
-    
+
     // Calls the API and put data into an array
     const apiUrl = 'http://localhost:8080/foods/orderbydeliverydate';
     const response = await fetch(apiUrl);
@@ -421,14 +446,15 @@ async function orderByDeliveryDate() {
         itemsList.innerHTML += template;
     });
     activateDeleteButtons();
-    activateModifyButtons()
+    activateModifyButtons();
+    showAlarms();
 }
 // Fetches data from the db ordered by expiring date
 async function orderByExpiringDate() {
-    
+
     // Updates the list
     itemsList.innerHTML = '';
-    
+
     // Calls the API and put data into an array
     const apiUrl = 'http://localhost:8080/foods/orderbyexpiringdate';
     const response = await fetch(apiUrl);
@@ -454,14 +480,15 @@ async function orderByExpiringDate() {
         itemsList.innerHTML += template;
     });
     activateDeleteButtons();
-    activateModifyButtons()
+    activateModifyButtons();
+    showAlarms();
 }
 // Fetches data from the db ordered by freezing date
 async function orderByFreezingDate() {
-    
+
     // Updates the list
     itemsList.innerHTML = '';
-    
+
     // Calls the API and put data into an array
     const apiUrl = 'http://localhost:8080/foods/orderbyfreezingdate';
     const response = await fetch(apiUrl);
@@ -487,7 +514,8 @@ async function orderByFreezingDate() {
         itemsList.innerHTML += template;
     });
     activateDeleteButtons();
-    activateModifyButtons()
+    activateModifyButtons();
+    showAlarms();
 }
 
 // Mouseover and mouseout functions
