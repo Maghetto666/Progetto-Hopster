@@ -388,6 +388,12 @@ async function orderBy(order) {
     showAlarms();
 }
 
+async function goTo(section) {
+    console.log(section);
+    let url = `${section}.html`
+    window.location = url;
+}
+
 // Mouseover and mouseout functions
 warehouse_btn.addEventListener('mouseover', function () {
     warehouse_icon.classList.add("upper-icons-hover");

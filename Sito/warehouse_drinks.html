@@ -3,7 +3,7 @@
 
 <head>
     <title>HOPSTER WAREHOUSE</title>
-    <link rel="stylesheet" href="warehouse-food/style.css">
+    <link rel="stylesheet" href="warehouse_drinks/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap"
@@ -23,15 +23,14 @@
 <body>
     <div class="sidebar">
 
-        <div class="hopster-logo"><img src="warehouse-food/images/Hopster%20logo.jpg" class="logo-img"></div>
+        <div class="hopster-logo"><img src="images/Hopster%20logo.jpg" class="logo-img"></div>
 
         <div class="upper-buttons">
-            <a class="upper-buttons-item warehouse-btn upper-selected "><img
-                    src="warehouse-food/images/warehouse-icon.svg"
-                    class="upper-icons warehouse-icon selected-upper-icon">Magazzino</a>
-            <a class="upper-buttons-item suppliers-btn"><img src="warehouse-food/images/suppliers-icon.svg"
+            <a class="upper-buttons-item warehouse-btn upper-selected" onclick="goTo('warehouse_foods')"><img
+                    src="images/warehouse-icon.svg" class="upper-icons warehouse-icon selected-upper-icon">Magazzino</a>
+            <a class="upper-buttons-item suppliers-btn" onclick="goTo('suppliers')"><img src="images/suppliers-icon.svg"
                     class="upper-icons suppliers-icon">Fornitori</a>
-            <a class="upper-buttons-item invoices-btn"><img src="warehouse-food/images/invoices-icon.svg"
+            <a class="upper-buttons-item invoices-btn" onclick="goTo('invoices')"><img src="images/invoices-icon.svg"
                     class="upper-icons invoices-icon">Fatture</a>
         </div>
 
@@ -40,20 +39,20 @@
             <text class="selection">Magazzino</text>
             <hr class="line">
 
-            <a class="foods-btn bottom-buttons-item bottom-selected"><img src="warehouse-food/images/foods-icon.svg"
-                    class="foods-icon bottom-icons selected-bottom-icon">Alimenti</a>
-            <a class="drinks-btn bottom-buttons-item"><img src="warehouse-food/images/drinks-icon.svg"
-                    class="drinks-icon bottom-icons">Bevande</a>
-            <a class="beers-btn bottom-buttons-item"><img src="warehouse-food/images/beers-icon.svg"
+            <a class="foods-btn bottom-buttons-item" onclick="goTo('warehouse_foods')"><img
+                    src="images/foods-icon.svg" class="foods-icon bottom-icons">Alimenti</a>
+            <a class="drinks-btn bottom-buttons-item bottom-selected" onclick="goTo('warehouse_drinks')"><img
+                    src="images/drinks-icon.svg" class="drinks-icon bottom-icons selected-bottom-icon">Bevande</a>
+            <a class="beers-btn bottom-buttons-item" onclick="goTo('warehouse_beers')"><img src="images/beers-icon.svg"
                     class="beers-icon bottom-icons">Birra</a>
-            <a class="supplies-btn bottom-buttons-item"><img src="warehouse-food/images/supplies-icon.svg"
-                    class="supplies-icon bottom-icons">Pulizia e servizio</a>
+            <a class="supplies-btn bottom-buttons-item" onclick="goTo('warehouse_supplies')"><img
+                    src="images/supplies-icon.svg" class="supplies-icon bottom-icons">Pulizia e servizio</a>
         </div>
 
         <div class="profile-settings">
-            <img src="warehouse-food/images/user_image.jpg" class="user_image">
+            <img src="images/user_image.jpg" class="user_image">
             <text class="profile_name">Profile name</text>
-            <a><img src="warehouse-food/images/settings-icon.svg" class="settings-icon"></a>
+            <a onclick="goTo('profile_settings')"><img src="images/settings-icon.svg" class="settings-icon"></a>
         </div>
     </div>
 
@@ -100,7 +99,7 @@
                 <input type="checkbox" class="frozenCheckbox">
                 <input type="text" class="frozenDate-input" placeholder="Congelato in data"
                     onfocus="(this.type = 'date')" required>
-                <button class="add-btn"><img src="warehouse-food/images/add.svg"></button>
+                <button class="add-btn"><img src="images/add.svg"></button>
             </div>
             <div class="editBox">
                 <input type="text" class="editNewProduct" placeholder="Prodotto" maxlength="110" required>
@@ -112,11 +111,11 @@
                 <input type="checkbox" class="editNewFrozenCheckBox">
                 <input type="text" class="editNewFreezingDate" placeholder="Congelato in data"
                     onfocus="(this.type = 'date')" required>
-                <button class="edit-btn" onclick="modifyFood()"><img src="warehouse-food/images/edit.svg"></button>
+                <button class="edit-btn" onclick="modifyFood()"><img src="images/edit.svg"></button>
             </div>
         </div>
     </div>
-    <script src="warehouse-food/script.js"></script>
+    <script src="warehouse_drinks/script.js"></script>
 </body>
 
 </html>

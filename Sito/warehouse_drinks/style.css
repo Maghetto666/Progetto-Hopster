@@ -32,6 +32,13 @@ body {
   margin: 1vh 2vh;
 }
 
+a:link .upper-buttons-item {
+  color: #003138FF;
+  background: #00A9C0FF;
+}
+
+
+
 .upper-buttons {
   display: flex;
   flex-direction: column;
@@ -55,6 +62,12 @@ body {
   white-space: nowrap;
   font-family: Inter;
   font-size: 32px;
+}
+
+.upper-buttons-item a:visited {
+  text-decoration: none;
+  color: #003138FF;
+  background: #00A9C0FF;
 }
 
 .upper-buttons-item:hover {
@@ -88,6 +101,21 @@ body {
   font-weight: 700;
   color: #9095A0FF;
   margin: 2vh 2vh;
+}
+
+a .bottom-buttons{
+  color: #00bdd6;
+  background: #1D2128FF;
+}
+
+a:link .bottom-buttons{
+  color: #00bdd6;
+  background: #1D2128FF;
+}
+
+a:visited .bottom-buttons{
+  color: #00bdd6;
+  background: #1D2128FF;
 }
 
 .bottom-buttons {
