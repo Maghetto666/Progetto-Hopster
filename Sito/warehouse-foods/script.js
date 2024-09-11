@@ -232,6 +232,7 @@ function activateDeleteButtons() {
 }
 
 async function deleteFood(id) {
+
     await fetch(`http://localhost:8080/foods/${id}`, {
         method: 'DELETE'
     });
@@ -260,6 +261,7 @@ function activateModifyButtons() {
 async function fillEditFields(id) {
     const response = await fetch(`http://localhost:8080/foods/${id}`);
     const data = await response.json();
+    let checkbox = false;
 
     editNewProduct.value = data.product;
     editNewQuantity.value = data.quantity;
@@ -267,10 +269,12 @@ async function fillEditFields(id) {
     editNewExpiringDate.value = data.expirationDate;
     editNewFrozenCheckBox.disabled = false;
     if (data.isFrozen == true) {
+        checkbox = true;
         editNewFrozenCheckBox.value = true;
         editNewFrozenCheckBox.checked = true;
         editNewFreezingDate.disabled = false;
     } else {
+        checkbox = false;
         editNewFrozenCheckBox.value = false;
         editNewFrozenCheckBox.checked = false;
         editNewFreezingDate.disabled = true;
@@ -279,14 +283,17 @@ async function fillEditFields(id) {
 }
 
 async function modifyFood() {
+
     let itemToModify = {
+        id: modify_id,
         product: editNewProduct.value,
         quantity: editNewQuantity.value,
         deliveryDate: editNewDeliveryDate.value,
         expirationDate: editNewExpiringDate.value,
-        frozen: editNewFrozenCheckBox.value,
+        isFrozen: editNewFrozenCheckBox.checked,
         freezingDate: editNewFreezingDate.value
     }
+
     editBox.style.visibility = "hidden";
     addBox.style.visibility = "visible";
 
@@ -296,14 +303,7 @@ async function modifyFood() {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            product: itemToModify.product,
-            quantity: itemToModify.quantity,
-            deliveryDate: itemToModify.deliveryDate,
-            expirationDate: itemToModify.expirationDate,
-            isFrozen: itemToModify.frozen,
-            freezingDate: itemToModify.freezingDate
-        })
+        body: JSON.stringify(itemToModify)
     });
 
     const checks = document.querySelectorAll('.modify-btn');
@@ -317,7 +317,7 @@ async function modifyFood() {
 // Creates HTML to add a new item in the list
 function buildTemplateHTML(id, product, quantity, deliverDate, expiringDate, isFrozen, frozenDate) {
 
-    if (isFrozen == true) {
+    if (isFrozen) {
         frozenDate_input.required = true;
         return `
                 <ul class="newItem" id=${id}>
@@ -325,7 +325,7 @@ function buildTemplateHTML(id, product, quantity, deliverDate, expiringDate, isF
                     <li class="quantity-item toFinish">${quantity}</li>
                     <li class="deliveryDate-item">${deliverDate}</li>
                     <li class="expiringDate-item toExpire">${expiringDate}</li>
-                    <li class="frozen-item"><input type="checkbox" class="frozen-checkbox" checked disabled></li>
+                    <li class="frozen-item"><input type="checkbox" class="frozen-checkbox" checked></li>
                     <li class="frozenDate-item">${frozenDate}</li>
                     <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
                 </ul>
@@ -344,153 +344,23 @@ function buildTemplateHTML(id, product, quantity, deliverDate, expiringDate, isF
     `
     }
 }
+
+let index = false;
+
 // Fetches data from the db ordered by product
-async function orderByProduct() {
-
+async function orderBy(order) {
+    let apiUrl = "";
+    if (index == false) {
+        apiUrl = `http://localhost:8080/foods?orderBy=${order}`;
+    } else {
+        apiUrl = `http://localhost:8080/foods?orderByDesc=${order}`;
+    }
+    index = !index;
     // Updates the list
     itemsList.innerHTML = '';
 
     // Calls the API and put data into an array
-    const apiUrl = 'http://localhost:8080/foods/orderbyproduct';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    products = data;
-    console.log(products);
 
-    products.forEach((product) => {
-        let dDateToFormat = new Date(product.deliveryDate);
-        let dDate = stringToDate(dDateToFormat);
-        let eDateToFormat = new Date(product.expirationDate);
-        let eDate = stringToDate(eDateToFormat);
-        let FDateToFormat = new Date(product.freezingDate);
-        let FDate = stringToDate(FDateToFormat);
-        const template = buildTemplateHTML(
-            product.id,
-            product.product,
-            product.quantity,
-            dDate,
-            eDate,
-            product.isFrozen,
-            FDate
-        );
-        itemsList.innerHTML += template;
-    });
-    activateDeleteButtons();
-    activateModifyButtons();
-    showAlarms();
-}
-
-// Fetches data from the db ordered by quantity
-async function orderByQuantity() {
-
-    // Updates the list
-    itemsList.innerHTML = '';
-
-    // Calls the API and put data into an array
-    const apiUrl = 'http://localhost:8080/foods/orderbyquantity';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    products = data;
-
-    products.forEach((product) => {
-        let dDateToFormat = new Date(product.deliveryDate);
-        let dDate = stringToDate(dDateToFormat);
-        let eDateToFormat = new Date(product.expirationDate);
-        let eDate = stringToDate(eDateToFormat);
-        let FDateToFormat = new Date(product.freezingDate);
-        let FDate = stringToDate(FDateToFormat);
-        const template = buildTemplateHTML(
-            product.id,
-            product.product,
-            product.quantity,
-            dDate,
-            eDate,
-            product.isFrozen,
-            FDate
-        );
-        itemsList.innerHTML += template;
-    });
-    activateDeleteButtons();
-    activateModifyButtons();
-    showAlarms();
-}
-
-// Fetches data from the db ordered by delivery date
-async function orderByDeliveryDate() {
-
-    // Updates the list
-    itemsList.innerHTML = '';
-
-    // Calls the API and put data into an array
-    const apiUrl = 'http://localhost:8080/foods/orderbydeliverydate';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    products = data;
-
-    products.forEach((product) => {
-        let dDateToFormat = new Date(product.deliveryDate);
-        let dDate = stringToDate(dDateToFormat);
-        let eDateToFormat = new Date(product.expirationDate);
-        let eDate = stringToDate(eDateToFormat);
-        let FDateToFormat = new Date(product.freezingDate);
-        let FDate = stringToDate(FDateToFormat);
-        const template = buildTemplateHTML(
-            product.id,
-            product.product,
-            product.quantity,
-            dDate,
-            eDate,
-            product.isFrozen,
-            FDate
-        );
-        itemsList.innerHTML += template;
-    });
-    activateDeleteButtons();
-    activateModifyButtons();
-    showAlarms();
-}
-// Fetches data from the db ordered by expiring date
-async function orderByExpiringDate() {
-
-    // Updates the list
-    itemsList.innerHTML = '';
-
-    // Calls the API and put data into an array
-    const apiUrl = 'http://localhost:8080/foods/orderbyexpiringdate';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    products = data;
-
-    products.forEach((product) => {
-        let dDateToFormat = new Date(product.deliveryDate);
-        let dDate = stringToDate(dDateToFormat);
-        let eDateToFormat = new Date(product.expirationDate);
-        let eDate = stringToDate(eDateToFormat);
-        let FDateToFormat = new Date(product.freezingDate);
-        let FDate = stringToDate(FDateToFormat);
-        const template = buildTemplateHTML(
-            product.id,
-            product.product,
-            product.quantity,
-            dDate,
-            eDate,
-            product.isFrozen,
-            FDate
-        );
-        itemsList.innerHTML += template;
-    });
-    activateDeleteButtons();
-    activateModifyButtons();
-    showAlarms();
-}
-// Fetches data from the db ordered by freezing date
-async function orderByFreezingDate() {
-
-    // Updates the list
-    itemsList.innerHTML = '';
-
-    // Calls the API and put data into an array
-    const apiUrl = 'http://localhost:8080/foods/orderbyfreezingdate';
     const response = await fetch(apiUrl);
     const data = await response.json();
     products = data;

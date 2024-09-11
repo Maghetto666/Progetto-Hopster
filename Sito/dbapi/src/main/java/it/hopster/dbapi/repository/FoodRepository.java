@@ -16,4 +16,14 @@ public interface FoodRepository extends JpaRepository<Food, Long> {
     List<Food> findByOrderByExpirationDate();
 
     List<Food> findByOrderByFreezingDate();
+
+    List<Food> findByOrderByProductDesc();
+
+    List<Food> findByOrderByQuantityDesc();
+
+    List<Food> findByOrderByDeliveryDateDesc();
+
+    List<Food> findByOrderByExpirationDateDesc();
+
+    List<Food> findByOrderByFreezingDateDesc();
 }
