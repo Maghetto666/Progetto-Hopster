@@ -59,7 +59,7 @@
     <div class="mainPage">
 
         <div class="upperDiv">
-            <h1 class="warehouse-section">Magazzino/Alimenti</h1>
+            <h1 class="warehouse-section">Magazzino/Bevande</h1>
             <div class="dropdown">
                 <button class="dropbtn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Ordina per...
@@ -76,11 +76,10 @@
 
         <div class="upperBar">
             <div class="product-upperBar">PRODOTTO</div>
+            <div class="brand-upperBar">MARCA</div>
             <div class="quantity-upperBar">QUANTITÀ</div>
             <div class="deliveryDate-upperBar">DATA DI RICEZIONE</div>
             <div class="expiringDate-upperBar">DATA DI SCADENZA</div>
-            <div class="frozen-upperBar">CONGELATO</div>
-            <div class="frozenDate-upperBar">IN DATA</div>
             <div class="buttons-upperBar"></div>
         </div>
         <div class="listDiv">
@@ -91,25 +90,21 @@
         <div class="boxes">
             <div class="addBox">
                 <input type="text" class="product-input" placeholder="Prodotto" maxlength="110" required>
+                <input type="text" class="brand-input" placeholder="Marca" maxlength="110">
                 <input type="number" class="quantity-input" placeholder="Quantità" required>
                 <input type="text" class="deliveryDate-input" placeholder="Data di ricezione"
                     onfocus="(this.type = 'date')" required>
                 <input type="text" class="expiringDate-input" placeholder="Data di scadenza"
                     onfocus="(this.type = 'date')" required>
-                <input type="checkbox" class="frozenCheckbox">
-                <input type="text" class="frozenDate-input" placeholder="Congelato in data"
-                    onfocus="(this.type = 'date')" required>
                 <button class="add-btn"><img src="images/add.svg"></button>
             </div>
             <div class="editBox">
                 <input type="text" class="editNewProduct" placeholder="Prodotto" maxlength="110" required>
+                <input type="text" class="editNewBrand" placeholder="Marca" maxlength="110">
                 <input type="number" class="editNewQuantity" placeholder="Quantità" required>
                 <input type="text" class="editNewDeliveryDate" placeholder="Data di ricezione"
                     onfocus="(this.type = 'date')" required>
                 <input type="text" class="editNewExpiringDate" placeholder="Data di scadenza"
-                    onfocus="(this.type = 'date')" required>
-                <input type="checkbox" class="editNewFrozenCheckBox">
-                <input type="text" class="editNewFreezingDate" placeholder="Congelato in data"
                     onfocus="(this.type = 'date')" required>
                 <button class="edit-btn" onclick="modifyFood()"><img src="images/edit.svg"></button>
             </div>

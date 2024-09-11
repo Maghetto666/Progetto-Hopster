@@ -66,26 +66,6 @@ public class FoodService {
         return foodRepository.findAll();
     }
 
-    public List<Food> getAllFoodsOrderByProduct() {
-        return foodRepository.findByOrderByProduct();
-    }
-
-    public List<Food> getAllFoodsOrderByQuantity() {
-        return foodRepository.findByOrderByQuantity();
-    }
-
-    public List<Food> getAllFoodsOrderByDeliveryDate() {
-        return foodRepository.findByOrderByDeliveryDate();
-    }
-
-    public List<Food> getAllFoodsOrderByExpirationDate() {
-        return foodRepository.findByOrderByExpirationDate();
-    }
-
-    public List<Food> getAllFoodsOrderByFreezingDate() {
-        return foodRepository.findByOrderByFreezingDate();
-    }
-
     public Food getFoodById(Long id) {
         return foodRepository.findById(id).orElse(null);
     }

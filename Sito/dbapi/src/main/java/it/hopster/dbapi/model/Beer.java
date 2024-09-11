@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Entity(name = "Beer")
@@ -22,10 +23,12 @@ public class Beer implements Serializable {
     private String brewery;
     @Column(nullable = false, length = 80)
     private String beerName;
+    private int quantity;
     @Column(nullable = false, length = 80)
     private String beerStyle;
     @Column(nullable = false, length = 80)
     private String barrelTypeAndTap;
-    private Date fullBarrelDate;
-    private Date emptyBarrelDate;
+    private LocalDate deliveryDate;
+    private LocalDate fullBarrelDate;
+    private LocalDate emptyBarrelDate;
 }

@@ -19,21 +19,17 @@ const itemsList = document.querySelector('.itemsList');
 
 // Add box input fields
 const product_input = document.querySelector('.product-input');
+const brand_input = document.querySelector('.brand-input');
 const quantity_input = document.querySelector('.quantity-input');
 const deliveryDate_input = document.querySelector('.deliveryDate-input');
 const expiringDate_input = document.querySelector('.expiringDate-input');
-const frozenCheckbox = document.querySelector('.frozenCheckbox');
-const frozenDate_input = document.querySelector('.frozenDate-input');
-frozenDate_input.disabled = true;
 
 // Edit box input fields
 const editNewProduct = document.querySelector('.editNewProduct');
+const editNewBrand = document.querySelector('.editNewBrand');
 const editNewQuantity = document.querySelector('.editNewQuantity');
 const editNewDeliveryDate = document.querySelector('.editNewDeliveryDate');
 const editNewExpiringDate = document.querySelector('.editNewExpiringDate');
-const editNewFrozenCheckBox = document.querySelector('.editNewFrozenCheckBox');
-const editNewFreezingDate = document.querySelector('.editNewFreezingDate');
-editNewFrozenCheckBox.disabled = true;
 
 // Main page buttons
 const add_btn = document.querySelector('.add-btn');
@@ -60,38 +56,30 @@ async function fetchDrinks() {
     // Updates the list
     itemsList.innerHTML = '';
     product_input.value = "";
+    brand_input.value = "";
     quantity_input.value = "";
     deliveryDate_input.value = "";
     expiringDate_input.value = "";
-    frozenCheckbox.checked = false;
-    frozenDate_input.value = "";
-    frozenDate_input.disabled = true;
 
     editNewProduct.value = "";
+    editNewBrand.value = "";
     editNewQuantity.value = "";
     editNewDeliveryDate.value = "";
     editNewExpiringDate.value = "";
-    editNewFrozenCheckBox.checked = false;
-    editNewFreezingDate.value = "";
-    editNewFreezingDate.disabled = true;
-
-
 
     products.forEach((product) => {
         let dDateToFormat = new Date(product.deliveryDate);
         let dDate = stringToDate(dDateToFormat);
         let eDateToFormat = new Date(product.expirationDate);
         let eDate = stringToDate(eDateToFormat);
-        let FDateToFormat = new Date(product.freezingDate);
-        let FDate = stringToDate(FDateToFormat);
+
         const template = buildTemplateHTML(
             product.id,
             product.product,
+            product.brand,
             product.quantity,
             dDate,
-            eDate,
-            product.isFrozen,
-            FDate
+            eDate
         );
         itemsList.innerHTML += template;
     });
@@ -123,27 +111,6 @@ function showAlarms() {
 
 }
 
-// Toggle the frozen date checkbox
-frozenCheckbox.addEventListener('click', function () {
-    if (frozenDate_input.disabled == true) {
-        frozenDate_input.disabled = false;
-    } else {
-        frozenDate_input.disabled = true;
-        frozenDate_input.value = null;
-    }
-});
-
-// Toggle the frozen date checkbox
-editNewFrozenCheckBox.addEventListener('click', function () {
-
-    if (editNewFrozenCheckBox.checked == true) {
-        editNewFreezingDate.disabled = false;
-    } else {
-        editNewFreezingDate.disabled = true;
-        editNewFreezingDate.value = null;
-    }
-});
-
 function stringToDate(dateToFormat) {
     const yyyy = dateToFormat.getFullYear();
     let mm = dateToFormat.getMonth() + 1;
@@ -161,41 +128,25 @@ add_btn.addEventListener('click', function () {
 
     // gets the parameters from the inputs
     let product = product_input.value.trim();
+    let brand = brand_input.value.trim();
     let quantity = quantity_input.value;
     let deliveryDate = deliveryDate_input.value;
     let expiringDate = expiringDate_input.value;
-    let frozenChecked = frozenCheckbox.checked;
-    let frozenDate = frozenDate_input.value;
 
     // puts the parameters into a new object 
     let itemToAdd = {
         product: product,
+        brand: brand,
         quantity: quantity,
         deliveryDate: deliveryDate,
-        expirationDate: expiringDate,
-        frozen: frozenChecked,
-        freezingDate: frozenDate
+        expirationDate: expiringDate
     }
 
-    // checks if the frozen date checkbox is active or not
-    if (frozenCheckbox.checked == true) {
-
-        // puts a required label on the frozen date input in case
-        frozenDate_input.required = true;
-
-        // checks if every field is compiled
-        if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0 || frozenDate == 0) {
-            return;
-        } else {
-            addToDB(itemToAdd);
-        }
+    // checks if every field is compiled
+    if (product.length == 0 || brand.length == 0 || quantity == 0 || deliveryDate == 0) {
+        return;
     } else {
-        frozenDate_input.required = false;
-        if (product.length == 0 || quantity == 0 || deliveryDate == 0 || expiringDate == 0) {
-            return;
-        } else {
-            addToDB(itemToAdd);
-        }
+        addToDB(itemToAdd);
     }
 });
 
@@ -208,11 +159,10 @@ async function addToDB(itemToAdd) {
         },
         body: JSON.stringify({
             product: itemToAdd.product,
+            brand: itemToAdd.brand,
             quantity: itemToAdd.quantity,
             deliveryDate: itemToAdd.deliveryDate,
-            expirationDate: itemToAdd.expirationDate,
-            isFrozen: itemToAdd.frozen,
-            freezingDate: itemToAdd.freezingDate
+            expirationDate: itemToAdd.expirationDate
         })
     });
 
@@ -264,22 +214,10 @@ async function fillEditFields(id) {
     let checkbox = false;
 
     editNewProduct.value = data.product;
+    editNewBrand.value = data.brand;
     editNewQuantity.value = data.quantity;
     editNewDeliveryDate.value = data.deliveryDate;
     editNewExpiringDate.value = data.expirationDate;
-    editNewFrozenCheckBox.disabled = false;
-    if (data.isFrozen == true) {
-        checkbox = true;
-        editNewFrozenCheckBox.value = true;
-        editNewFrozenCheckBox.checked = true;
-        editNewFreezingDate.disabled = false;
-    } else {
-        checkbox = false;
-        editNewFrozenCheckBox.value = false;
-        editNewFrozenCheckBox.checked = false;
-        editNewFreezingDate.disabled = true;
-    }
-    editNewFreezingDate.value = data.freezingDate;
 }
 
 async function modifyFood() {
@@ -287,11 +225,10 @@ async function modifyFood() {
     let itemToModify = {
         id: modify_id,
         product: editNewProduct.value,
+        brand: editNewBrand.value,
         quantity: editNewQuantity.value,
         deliveryDate: editNewDeliveryDate.value,
-        expirationDate: editNewExpiringDate.value,
-        isFrozen: editNewFrozenCheckBox.checked,
-        freezingDate: editNewFreezingDate.value
+        expirationDate: editNewExpiringDate.value
     }
 
     editBox.style.visibility = "hidden";
@@ -315,34 +252,18 @@ async function modifyFood() {
 }
 
 // Creates HTML to add a new item in the list
-function buildTemplateHTML(id, product, quantity, deliverDate, expiringDate, isFrozen, frozenDate) {
+function buildTemplateHTML(id, product, brand, quantity, deliverDate, expiringDate) {
 
-    if (isFrozen) {
-        frozenDate_input.required = true;
-        return `
+    return `
                 <ul class="newItem" id=${id}>
                     <li class="product-item">${product}</li>
+                    <li class="brand-item">${brand}</li>
                     <li class="quantity-item toFinish">${quantity}</li>
                     <li class="deliveryDate-item">${deliverDate}</li>
                     <li class="expiringDate-item toExpire">${expiringDate}</li>
-                    <li class="frozen-item"><input type="checkbox" class="frozen-checkbox" checked></li>
-                    <li class="frozenDate-item">${frozenDate}</li>
                     <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
                 </ul>
     `
-    } else {
-        return `
-                <ul class="newItem" id=${id}>
-                    <li class="product-item">${product}</li>
-                    <li class="quantity-item toFinish">${quantity}</li>
-                    <li class="deliveryDate-item">${deliverDate}</li>
-                    <li class="expiringDate-item toExpire">${expiringDate}</li>
-                    <li class="frozen-item"><input type="checkbox" class="frozen-checkbox" disabled></li>
-                    <li class="frozenDate-item" disabled></li>
-                    <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
-                </ul>
-    `
-    }
 }
 
 let index = false;
@@ -370,16 +291,14 @@ async function orderBy(order) {
         let dDate = stringToDate(dDateToFormat);
         let eDateToFormat = new Date(product.expirationDate);
         let eDate = stringToDate(eDateToFormat);
-        let FDateToFormat = new Date(product.freezingDate);
-        let FDate = stringToDate(FDateToFormat);
+
         const template = buildTemplateHTML(
             product.id,
             product.product,
+            product.brand,
             product.quantity,
             dDate,
-            eDate,
-            product.isFrozen,
-            FDate
+            eDate
         );
         itemsList.innerHTML += template;
     });

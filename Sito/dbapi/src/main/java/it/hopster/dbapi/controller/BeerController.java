@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -24,15 +23,15 @@ import java.util.List;
 public class BeerController {
 
     @Autowired
-    BeerService beerService;
+    BeerService beerService = new BeerService();
 
     private static final Logger logger = LoggerFactory.getLogger(BeerController.class);
 
     @GetMapping
     @Operation(summary = "Recupera birre", description = "Recupera tutte le birre sul database")
     @ApiResponse(responseCode = "200", description = "Birre recuperate con successo")
-    public List<Beer> getAllBeers() {
-        return beerService.getAllBeers();
+    public List<Beer> getAllBeers(@RequestParam(required = false) String orderBy, @RequestParam(required = false) String orderByDesc) {
+        return beerService.getAllBeers(orderBy, orderByDesc);
     }
 
     @GetMapping("/{id}")
@@ -53,34 +52,26 @@ public class BeerController {
     @PostMapping
     @Operation(summary = "Aggiunge una birra", description = "Aggiunge una nuova birra sul database")
     @ApiResponse(responseCode = "200", description = "Birra aggiunta con successo")
-    public ResponseEntity<Beer> createBeer(
-            @RequestParam String brewery, @RequestParam String beerName,
-            @RequestParam String beerStyle, @RequestParam String barrelTypeAndTap,
-            @RequestParam Date fullBarrelDate, @RequestParam Date emptyBarrelDate
-    ) {
-        Beer newBeer = beerService.createBeer(
-                brewery, beerName, beerStyle, barrelTypeAndTap, fullBarrelDate, emptyBarrelDate
-        );
+    public ResponseEntity<Beer> createBeer(@RequestBody Beer beer) {
+        Beer newBeer = new Beer();
+        newBeer.setBeerName(beer.getBeerName());
+        newBeer.setBrewery(beer.getBrewery());
+        newBeer.setQuantity(beer.getQuantity());
+        newBeer.setBeerStyle(beer.getBeerStyle());
+        newBeer.setBarrelTypeAndTap(beer.getBarrelTypeAndTap());
+        newBeer.setDeliveryDate(beer.getDeliveryDate());
+        newBeer.setFullBarrelDate(beer.getFullBarrelDate());
+        newBeer.setEmptyBarrelDate(beer.getEmptyBarrelDate());
+        beerService.createBeer(newBeer);
         return ResponseEntity.status(HttpStatus.CREATED).body(newBeer);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Modifica dettagli birra", description = "Modifica i dettagli di una birra trovata tramite id")
     @ApiResponse(responseCode = "200", description = "Birra modificata con successo")
-    public Beer updateBeer(@PathVariable Long id,
-                           @RequestParam String brewery, @RequestParam String beerName,
-                           @RequestParam String beerStyle, @RequestParam String barrelTypeAndTap,
-                           @RequestParam Date fullBarrelDate, @RequestParam Date emptyBarrelDate
-    ) {
-        Beer updatedBeer = beerService.updateBeer(
-                brewery, beerName, beerStyle, barrelTypeAndTap, fullBarrelDate, emptyBarrelDate
-        );
-        if (updatedBeer == null) {
-            logger.error("Birra non trovata con quell'id");
-            throw new BeerNotFoundException("Beer not found with id: " + id);
-        } else {
-            return updatedBeer;
-        }
+    public ResponseEntity<Beer> updateBeer(@PathVariable Long id, Beer beer) {
+        Beer updatedBeer = beerService.updateBeer(id, beer);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedBeer);
     }
 
     @DeleteMapping("/{id}")

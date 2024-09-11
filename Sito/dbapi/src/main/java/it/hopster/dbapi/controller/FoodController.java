@@ -68,15 +68,7 @@ public class FoodController {
     @PutMapping("{id}")
     @Operation(summary = "Modifica dettagli alimento", description = "Modifica i dettagli di un alimento trovato tramite id")
     @ApiResponse(responseCode = "200", description = "Alimento modificato con successo")
-    public ResponseEntity<Food> updateFood(@PathVariable Long id,
-                                           /*@RequestBody String product,
-                                           @RequestBody int quantity,
-                                           @RequestBody LocalDate deliveryDate,
-                                           @RequestBody LocalDate expirationDate,
-                                           @RequestBody Boolean isFrozen,
-                                           @RequestBody LocalDate freezingDate*/
-                                           @RequestBody Food food
-    ) {
+    public ResponseEntity<Food> updateFood(@PathVariable Long id, @RequestBody Food food) {
         Food updatedFood = foodService.updateFood(id, food);
         return ResponseEntity.status(HttpStatus.OK).body(updatedFood);
     }

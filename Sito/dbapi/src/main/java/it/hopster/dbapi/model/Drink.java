@@ -6,7 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity(name = "Drink")
 @Table(name = "drinks")
@@ -23,5 +23,6 @@ public class Drink implements Serializable {
     @Column(nullable = false, length = 80)
     private String brand;
     private int quantity;
-    private Date expirationDate;
+    private LocalDate deliveryDate;
+    private LocalDate expirationDate;
 }
