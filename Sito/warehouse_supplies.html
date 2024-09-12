@@ -3,7 +3,7 @@
 
 <head>
     <title>HOPSTER WAREHOUSE</title>
-    <link rel="stylesheet" href="warehouse_drinks/style.css">
+    <link rel="stylesheet" href="warehouse_supplies/style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap"
@@ -39,14 +39,15 @@
             <text class="selection">Magazzino</text>
             <hr class="line">
 
-            <a class="foods-btn bottom-buttons-item" onclick="goTo('warehouse_foods')"><img
-                    src="images/foods-icon.svg" class="foods-icon bottom-icons">Alimenti</a>
-            <a class="drinks-btn bottom-buttons-item bottom-selected" onclick="goTo('warehouse_drinks')"><img
-                    src="images/drinks-icon.svg" class="drinks-icon bottom-icons selected-bottom-icon">Bevande</a>
+            <a class="foods-btn bottom-buttons-item" onclick="goTo('warehouse_foods')"><img src="images/foods-icon.svg"
+                    class="foods-icon bottom-icons">Alimenti</a>
+            <a class="drinks-btn bottom-buttons-item" onclick="goTo('warehouse_drinks')"><img
+                    src="images/drinks-icon.svg" class="drinks-icon bottom-icons">Bevande</a>
             <a class="beers-btn bottom-buttons-item" onclick="goTo('warehouse_beers')"><img src="images/beers-icon.svg"
                     class="beers-icon bottom-icons">Birra</a>
-            <a class="supplies-btn bottom-buttons-item" onclick="goTo('warehouse_supplies')"><img
-                    src="images/supplies-icon.svg" class="supplies-icon bottom-icons">Pulizia e servizio</a>
+            <a class="supplies-btn bottom-buttons-item bottom-selected" onclick="goTo('warehouse_supplies')"><img
+                    src="images/supplies-icon.svg" class="supplies-icon bottom-icons selected-bottom-icon">Pulizia e
+                servizio</a>
         </div>
 
         <div class="profile-settings">
@@ -59,7 +60,7 @@
     <div class="mainPage">
 
         <div class="upperDiv">
-            <h1 class="warehouse-section">Magazzino/Bevande</h1>
+            <h1 class="warehouse-section">Magazzino/Pulizia e servizio</h1>
             <div class="dropdown">
                 <button class="dropbtn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
                     Ordina per...
@@ -68,18 +69,18 @@
                     <a class="dropdown-item" onclick="orderBy('product')">Prodotto</a>
                     <a class="dropdown-item" onclick="orderBy('quantity')">Quantità</a>
                     <a class="dropdown-item" onclick="orderBy('deliveryDate')">Data di ricezione</a>
-                    <a class="dropdown-item" onclick="orderBy('expirationDate')">Data di scadenza</a>
-                    <a class="dropdown-item" onclick="orderBy('freezingDate')">Data di congelamento</a>
+                    <a class="dropdown-item" onclick="orderBy('exhaustionDate')">Data di esaurimento</a>
+                    <a class="dropdown-item" onclick="orderBy('duration')">Durata</a>
                 </div>
             </div>
         </div>
 
         <div class="upperBar">
             <div class="product-upperBar">PRODOTTO</div>
-            <div class="brand-upperBar">MARCA</div>
             <div class="quantity-upperBar">QUANTITÀ</div>
             <div class="deliveryDate-upperBar">DATA DI RICEZIONE</div>
-            <div class="expiringDate-upperBar">DATA DI SCADENZA</div>
+            <div class="exhaustionDate-upperBar">DATA DI ESAURIMENTO</div>
+            <div class="duration-upperBar">DURATA</div>
             <div class="buttons-upperBar"></div>
         </div>
         <div class="listDiv">
@@ -90,27 +91,25 @@
         <div class="boxes">
             <div class="addBox">
                 <input type="text" class="product-input" placeholder="Prodotto" maxlength="110" required>
-                <input type="text" class="brand-input" placeholder="Marca" maxlength="110">
                 <input type="number" class="quantity-input" placeholder="Quantità" required>
                 <input type="text" class="deliveryDate-input" placeholder="Data di ricezione"
                     onfocus="(this.type = 'date')" required>
-                <input type="text" class="expiringDate-input" placeholder="Data di scadenza"
+                <input type="text" class="exhaustionDate-input" placeholder="Data di esaurimento"
                     onfocus="(this.type = 'date')" required>
                 <button class="add-btn"><img src="images/add.svg"></button>
             </div>
             <div class="editBox">
                 <input type="text" class="editNewProduct" placeholder="Prodotto" maxlength="110" required>
-                <input type="text" class="editNewBrand" placeholder="Marca" maxlength="110">
                 <input type="number" class="editNewQuantity" placeholder="Quantità" required>
                 <input type="text" class="editNewDeliveryDate" placeholder="Data di ricezione"
                     onfocus="(this.type = 'date')" required>
-                <input type="text" class="editNewExpiringDate" placeholder="Data di scadenza"
+                <input type="text" class="editNewExhaustionDate" placeholder="Data di esaurimento"
                     onfocus="(this.type = 'date')" required>
-                <button class="edit-btn" onclick="modifyFood()"><img src="images/edit.svg"></button>
+                <button class="edit-btn" onclick="modifySupply()"><img src="images/edit.svg"></button>
             </div>
         </div>
     </div>
-    <script src="warehouse_drinks/script.js"></script>
+    <script src="warehouse_supplies/script.js"></script>
 </body>
 
 </html>

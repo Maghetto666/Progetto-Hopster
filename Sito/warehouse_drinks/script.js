@@ -176,12 +176,12 @@ function activateDeleteButtons() {
     for (let i = 0; i < checks.length; i++) {
         checks[i].addEventListener('click', function () {
             let id = checks[i].id;
-            deleteFood(id);
+            deleteDrink(id);
         });
     };
 }
 
-async function deleteFood(id) {
+async function deleteDrink(id) {
 
     await fetch(`http://localhost:8080/drinks/${id}`, {
         method: 'DELETE'
@@ -219,7 +219,7 @@ async function fillEditFields(id) {
     editNewExpiringDate.value = data.expirationDate;
 }
 
-async function modifyFood() {
+async function modifyDrinks() {
 
     let itemToModify = {
         id: modify_id,

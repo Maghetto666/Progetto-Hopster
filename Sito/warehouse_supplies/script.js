@@ -19,17 +19,15 @@ const itemsList = document.querySelector('.itemsList');
 
 // Add box input fields
 const product_input = document.querySelector('.product-input');
-const brand_input = document.querySelector('.brand-input');
 const quantity_input = document.querySelector('.quantity-input');
 const deliveryDate_input = document.querySelector('.deliveryDate-input');
-const expiringDate_input = document.querySelector('.expiringDate-input');
+const exhaustionDate_input = document.querySelector('.exhaustionDate-input');
 
 // Edit box input fields
 const editNewProduct = document.querySelector('.editNewProduct');
-const editNewBrand = document.querySelector('.editNewBrand');
 const editNewQuantity = document.querySelector('.editNewQuantity');
 const editNewDeliveryDate = document.querySelector('.editNewDeliveryDate');
-const editNewExpiringDate = document.querySelector('.editNewExpiringDate');
+const editNewExhaustionDate = document.querySelector('.editNewExhaustionDate');
 
 // Main page buttons
 const add_btn = document.querySelector('.add-btn');
@@ -43,12 +41,12 @@ editBox.style.visibility = "hidden";
 // Starters
 let modify_id = 0;
 let products = [];
-fetchDrinks();
+fetchSupplies();
 
 // Fetches data from the db
-async function fetchDrinks() {
+async function fetchSupplies() {
     // Calls the API and put data into an array
-    const apiUrl = 'http://localhost:8080/drinks';
+    const apiUrl = 'http://localhost:8080/supplies';
     const response = await fetch(apiUrl);
     const data = await response.json();
     products = data;
@@ -56,30 +54,32 @@ async function fetchDrinks() {
     // Updates the list
     itemsList.innerHTML = '';
     product_input.value = "";
-    brand_input.value = "";
     quantity_input.value = "";
     deliveryDate_input.value = "";
-    expiringDate_input.value = "";
+    exhaustionDate_input.value = "";
 
     editNewProduct.value = "";
-    editNewBrand.value = "";
     editNewQuantity.value = "";
     editNewDeliveryDate.value = "";
-    editNewExpiringDate.value = "";
+    editNewExhaustionDate.value = "";
 
     products.forEach((product) => {
         let dDateToFormat = new Date(product.deliveryDate);
         let dDate = stringToDate(dDateToFormat);
-        let eDateToFormat = new Date(product.expirationDate);
-        let eDate = stringToDate(eDateToFormat);
+        let eDateToFormat = new Date(product.exhaustionDate);
+        let eDate = "da finire";
+        let duration = null;
+        if (product.exhaustionDate != null) {
+            duration = diffOfDates(dDateToFormat, eDateToFormat);
+        }
 
         const template = buildTemplateHTML(
             product.id,
             product.product,
-            product.brand,
             product.quantity,
             dDate,
-            eDate
+            eDate,
+            duration
         );
         itemsList.innerHTML += template;
     });
@@ -89,26 +89,14 @@ async function fetchDrinks() {
 }
 
 function showAlarms() {
-    let today = new Date();
-    let limit = 2 * 24 * 60 * 60 * 1000;
 
-    // Shows alarm if the expiration time is close to 2 days
+    // Shows alarm if quantity is 0
     products.forEach(item => {
-        date = new Date(item.expirationDate);
-        if (date - today < limit) {
-            const element = document.getElementById(item.id).querySelector('.toExpire');
-            element.style.color = 'red';
-        }
-    })
-
-    // Shows alarm if quantity is 5 or less
-    products.forEach(item => {
-        if (item.quantity <= 5) {
+        if (item.quantity <= 0) {
             const element = document.getElementById(`${item.id}`).querySelector('.toFinish');
             element.style.color = 'red';
         }
     })
-
 }
 
 function stringToDate(dateToFormat) {
@@ -123,27 +111,42 @@ function stringToDate(dateToFormat) {
     return formattedDay;
 }
 
+function diffOfDates(deliveryDate, exhaustionDate) {
+    const diffTime = exhaustionDate - deliveryDate;
+    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));    
+    return diffDays;
+}
+
 // Add a new item to the list and to the local storage
 add_btn.addEventListener('click', function () {
 
     // gets the parameters from the inputs
     let product = product_input.value.trim();
-    let brand = brand_input.value.trim();
     let quantity = quantity_input.value;
     let deliveryDate = deliveryDate_input.value;
-    let expiringDate = expiringDate_input.value;
+    let exhaustionDate = exhaustionDate_input.value;
+    let duration = "da finire";
+
+    if (exhaustionDate != null || exhaustionDate != "") {
+        let dDateToFormat = new Date(deliveryDate);
+        let dDate = stringToDate(dDateToFormat);
+        let eDateToFormat = new Date(exhaustionDate);
+        let eDate = stringToDate(eDateToFormat);
+
+        duration = diffOfDates(dDate, eDate);
+    }
 
     // puts the parameters into a new object 
     let itemToAdd = {
         product: product,
-        brand: brand,
         quantity: quantity,
         deliveryDate: deliveryDate,
-        expirationDate: expiringDate
+        exhaustionDate: exhaustionDate,
+        duration: duration
     }
 
     // checks if every field is compiled
-    if (product.length == 0 || brand.length == 0 || quantity == 0 || deliveryDate == 0) {
+    if (product.length == 0 || quantity == 0 || deliveryDate == 0) {
         return;
     } else {
         addToDB(itemToAdd);
@@ -151,22 +154,16 @@ add_btn.addEventListener('click', function () {
 });
 
 async function addToDB(itemToAdd) {
-    const response = await fetch('http://localhost:8080/drinks', {
+    const response = await fetch('http://localhost:8080/supplies', {
         method: 'POST',
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({
-            product: itemToAdd.product,
-            brand: itemToAdd.brand,
-            quantity: itemToAdd.quantity,
-            deliveryDate: itemToAdd.deliveryDate,
-            expirationDate: itemToAdd.expirationDate
-        })
+        body: JSON.stringify(itemToAdd)
     });
 
-    fetchDrinks();
+    fetchSupplies();
 }
 
 // Delete the selected items from list
@@ -176,17 +173,17 @@ function activateDeleteButtons() {
     for (let i = 0; i < checks.length; i++) {
         checks[i].addEventListener('click', function () {
             let id = checks[i].id;
-            deleteFood(id);
+            deleteSupply(id);
         });
     };
 }
 
-async function deleteFood(id) {
+async function deleteSupply(id) {
 
-    await fetch(`http://localhost:8080/drinks/${id}`, {
+    await fetch(`http://localhost:8080/supplies/${id}`, {
         method: 'DELETE'
     });
-    fetchDrinks();
+    fetchSupplies();
 }
 
 function activateModifyButtons() {
@@ -209,31 +206,38 @@ function activateModifyButtons() {
 }
 
 async function fillEditFields(id) {
-    const response = await fetch(`http://localhost:8080/drinks/${id}`);
+    const response = await fetch(`http://localhost:8080/supplies/${id}`);
     const data = await response.json();
-    
+
     editNewProduct.value = data.product;
-    editNewBrand.value = data.brand;
     editNewQuantity.value = data.quantity;
     editNewDeliveryDate.value = data.deliveryDate;
-    editNewExpiringDate.value = data.expirationDate;
+    editNewExhaustionDate.value = data.exhaustionDate;
 }
 
-async function modifyFood() {
+async function modifySupply() {
+
+    let duration = null;
+
+    if (editNewExhaustionDate.value != null) {
+        let dDate = stringToDate(editNewDeliveryDate);
+        let eDate = stringToDate(editNewExhaustionDate);
+        duration = diffOfDates(dDate, eDate);
+    }
 
     let itemToModify = {
         id: modify_id,
         product: editNewProduct.value,
-        brand: editNewBrand.value,
         quantity: editNewQuantity.value,
         deliveryDate: editNewDeliveryDate.value,
-        expirationDate: editNewExpiringDate.value
+        exhaustionDate: editNewExhaustionDate.value,
+        duration: duration
     }
 
     editBox.style.visibility = "hidden";
     addBox.style.visibility = "visible";
 
-    await fetch(`http://localhost:8080/drinks/${modify_id}`, {
+    await fetch(`http://localhost:8080/supplies/${modify_id}`, {
         method: 'PUT',
         headers: {
             'Accept': 'application/json',
@@ -247,19 +251,19 @@ async function modifyFood() {
         document.getElementsByClassName("modify-btn")[i].style.visibility = "visible";
     };
 
-    fetchDrinks();
+    fetchSupplies();
 }
 
 // Creates HTML to add a new item in the list
-function buildTemplateHTML(id, product, brand, quantity, deliveryDate, expiringDate) {
+function buildTemplateHTML(id, product, quantity, deliveryDate, exhaustionDate, duration) {
 
     return `
                 <ul class="newItem" id=${id}>
                     <li class="product-item">${product}</li>
-                    <li class="brand-item">${brand}</li>
                     <li class="quantity-item toFinish">${quantity}</li>
                     <li class="deliveryDate-item">${deliveryDate}</li>
-                    <li class="expiringDate-item toExpire">${expiringDate}</li>
+                    <li class="exhaustionDate-item">${exhaustionDate}</li>
+                    <li class="duration-item">${duration} giorni</li>
                     <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
                 </ul>
     `
@@ -271,9 +275,9 @@ let index = false;
 async function orderBy(order) {
     let apiUrl = "";
     if (index == false) {
-        apiUrl = `http://localhost:8080/drinks?orderBy=${order}`;
+        apiUrl = `http://localhost:8080/supplies?orderBy=${order}`;
     } else {
-        apiUrl = `http://localhost:8080/drinks?orderByDesc=${order}`;
+        apiUrl = `http://localhost:8080/supplies?orderByDesc=${order}`;
     }
     index = !index;
     // Updates the list
@@ -288,16 +292,16 @@ async function orderBy(order) {
     products.forEach((product) => {
         let dDateToFormat = new Date(product.deliveryDate);
         let dDate = stringToDate(dDateToFormat);
-        let eDateToFormat = new Date(product.expirationDate);
+        let eDateToFormat = new Date(product.exhaustionDate);
         let eDate = stringToDate(eDateToFormat);
 
         const template = buildTemplateHTML(
             product.id,
             product.product,
-            product.brand,
             product.quantity,
             dDate,
-            eDate
+            eDate,
+            duration
         );
         itemsList.innerHTML += template;
     });
