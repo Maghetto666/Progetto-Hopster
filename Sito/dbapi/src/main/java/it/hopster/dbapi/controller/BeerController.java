@@ -69,7 +69,7 @@ public class BeerController {
     @PutMapping("{id}")
     @Operation(summary = "Modifica dettagli birra", description = "Modifica i dettagli di una birra trovata tramite id")
     @ApiResponse(responseCode = "200", description = "Birra modificata con successo")
-    public ResponseEntity<Beer> updateBeer(@PathVariable Long id, Beer beer) {
+    public ResponseEntity<Beer> updateBeer(@PathVariable Long id, @RequestBody Beer beer) {
         Beer updatedBeer = beerService.updateBeer(id, beer);
         return ResponseEntity.status(HttpStatus.OK).body(updatedBeer);
     }

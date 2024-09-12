@@ -1,6 +1,5 @@
 package it.hopster.dbapi.controller;
 
-
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -32,8 +30,8 @@ public class SupplyController {
     @GetMapping
     @Operation(summary = "Recupera utenti", description = "Recupera tutti gli utenti sul database")
     @ApiResponse(responseCode = "200", description = "Utenti recuperati con successo")
-    public List<Supply> getAllSupplies() {
-        return supplyService.getAllSupplies();
+    public List<Supply> getAllSupplies(@RequestParam(required = false) String orderBy, @RequestParam(required = false) String orderByDesc) {
+        return supplyService.getAllSupplies(orderBy, orderByDesc);
     }
 
     @GetMapping("/{id}")
@@ -54,28 +52,23 @@ public class SupplyController {
     @PostMapping
     @Operation(summary = "Aggiunge un prodotto", description = "Aggiunge un nuovo prodotto sul database")
     @ApiResponse(responseCode = "200", description = "Prodotto aggiunto con successo")
-    public ResponseEntity<Supply> createSupply(
-            @RequestParam String product, @RequestParam int quantity,
-            @RequestParam Date deliveryDate, @RequestParam Date expirationDate
-    ) {
-        Supply newSupply = supplyService.createSupply(product, quantity, deliveryDate, expirationDate);
+    public ResponseEntity<Supply> createSupply(@RequestBody Supply supply) {
+        Supply newSupply = new Supply();
+        newSupply.setProduct(supply.getProduct());
+        newSupply.setQuantity(supply.getQuantity());
+        newSupply.setDeliveryDate(supply.getDeliveryDate());
+        newSupply.setExhaustionDate(supply.getExhaustionDate());
+        newSupply.setDuration(supply.getDuration());
+        supplyService.createSupply(newSupply);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSupply);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Modifica dettagli prodotto", description = "Modifica i dettagli di un prodotto trovato tramite id")
     @ApiResponse(responseCode = "200", description = "Prodotto modificato con successo")
-    public Supply updateSupply(@PathVariable Long id,
-                               @RequestParam String product, @RequestParam int quantity,
-                               @RequestParam Date deliveryDate, @RequestParam Date expirationDate
-    ) {
-        Supply updatedSupply = supplyService.updateSupply(product, quantity, deliveryDate, expirationDate);
-        if (updatedSupply == null) {
-            logger.error("Prodotto non trovato con quell'id");
-            throw new SupplyNotFoundException("Supply not found with id: " + id);
-        } else {
-            return updatedSupply;
-        }
+    public ResponseEntity<Supply> updateSupply(@PathVariable Long id, @RequestBody Supply supply) {
+        Supply updatedSupply = supplyService.updateSupply(id, supply);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedSupply);
     }
 
     @DeleteMapping("/{id}")

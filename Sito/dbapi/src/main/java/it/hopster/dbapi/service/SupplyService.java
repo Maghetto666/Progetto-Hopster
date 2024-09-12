@@ -1,7 +1,7 @@
 package it.hopster.dbapi.service;
 
+import it.hopster.dbapi.exception.FoodNotFoundException;
 import it.hopster.dbapi.model.Supply;
-
 import it.hopster.dbapi.repository.SupplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,54 @@ public class SupplyService {
     @Autowired
     private SupplyRepository supplyRepository;
 
-    public List<Supply> getAllSupplies() {
+    public List<Supply> getAllSupplies(String orderBy, String orderByDesc) {
+        if (orderBy == null && orderByDesc == null) {
+            return supplyRepository.findAll();
+        }
+        if (orderBy != null && !orderBy.isEmpty()) {
+            return orderBy(orderBy);
+        }
+        if (orderByDesc != null && !orderByDesc.isEmpty())
+            return orderByDesc(orderByDesc);
+
+        return supplyRepository.findAll();
+    }
+
+    private List<Supply> orderBy(String orderBy) {
+        if (orderBy.equals("product")) {
+            return supplyRepository.findByOrderByProduct();
+        }
+        if (orderBy.equals("quantity")) {
+            return supplyRepository.findByOrderByQuantity();
+        }
+        if (orderBy.equals("deliveryDate")) {
+            return supplyRepository.findByOrderByDeliveryDate();
+        }
+        if (orderBy.equals("exhaustionDate")) {
+            return supplyRepository.findByOrderByExhaustionDate();
+        }
+        if (orderBy.equals("duration")) {
+            return supplyRepository.findByOrderByDuration();
+        }
+        return supplyRepository.findAll();
+    }
+
+    private List<Supply> orderByDesc(String orderBy) {
+        if (orderBy.equals("product")) {
+            return supplyRepository.findByOrderByProductDesc();
+        }
+        if (orderBy.equals("quantity")) {
+            return supplyRepository.findByOrderByQuantityDesc();
+        }
+        if (orderBy.equals("deliveryDate")) {
+            return supplyRepository.findByOrderByDeliveryDateDesc();
+        }
+        if (orderBy.equals("exhaustionDate")) {
+            return supplyRepository.findByOrderByExhaustionDateDesc();
+        }
+        if (orderBy.equals("duration")) {
+            return supplyRepository.findByOrderByDurationDesc();
+        }
         return supplyRepository.findAll();
     }
 
@@ -23,24 +70,16 @@ public class SupplyService {
         return supplyRepository.findById(id).orElse(null);
     }
 
-    public Supply createSupply(
-            String product, int quantity,
-            Date deliveryDate, Date expirationDate
-    ) {
-        Supply newSupply = new Supply(
-                null, product, quantity, deliveryDate, expirationDate
-        );
+    public Supply createSupply(Supply newSupply) {
         return supplyRepository.save(newSupply);
     }
 
-    public Supply updateSupply(
-            String product, int quantity,
-            Date deliveryDate, Date expirationDate
-    ) {
-        Supply supply = new Supply(
-                null, product, quantity, deliveryDate, expirationDate
-        );
-        return supplyRepository.save(supply);
+    public Supply updateSupply(Long id, Supply updatedSupply) {
+        Supply supply = supplyRepository.findById(id).orElseThrow(() -> new FoodNotFoundException("Prodotto non trovato"));
+        if (!supply.getId().equals(updatedSupply.getId())) {
+            throw new FoodNotFoundException("ID prodotti discordanti");
+        }
+        return supplyRepository.save(updatedSupply);
     }
 
     public boolean deleteSupply(Long id) {

@@ -1,5 +1,6 @@
 package it.hopster.dbapi.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,6 +30,8 @@ public class Beer implements Serializable {
     @Column(nullable = false, length = 80)
     private String barrelTypeAndTap;
     private LocalDate deliveryDate;
+    @Nullable
     private LocalDate fullBarrelDate;
+    @Nullable
     private LocalDate emptyBarrelDate;
 }
