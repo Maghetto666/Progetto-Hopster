@@ -217,11 +217,13 @@ async function fillEditFields(id) {
 
 async function modifySupply() {
 
-    let duration = null;
+    let duration = "da finire";
 
     if (editNewExhaustionDate.value != null) {
-        let dDate = stringToDate(editNewDeliveryDate);
-        let eDate = stringToDate(editNewExhaustionDate);
+        let dDateToFormat = new Date(editNewDeliveryDate)
+        let dDate = stringToDate(dDateToFormat);
+        let eDateToFormat = new Date(editNewExhaustionDate)
+        let eDate = stringToDate(eDateToFormat);
         duration = diffOfDates(dDate, eDate);
     }
 
