@@ -28,5 +28,5 @@ public class Supply implements Serializable {
     @Nullable
     private LocalDate exhaustionDate;
     @Nullable
-    private LocalDate duration;
+    private Integer duration;
 }

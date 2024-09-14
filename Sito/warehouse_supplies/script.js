@@ -51,6 +51,7 @@ async function fetchSupplies() {
     const data = await response.json();
     products = data;
 
+
     // Updates the list
     itemsList.innerHTML = '';
     product_input.value = "";
@@ -69,8 +70,9 @@ async function fetchSupplies() {
         let eDateToFormat = new Date(product.exhaustionDate);
         let eDate = "da finire";
         let duration = null;
-        if (product.exhaustionDate != null) {
+        if (product.exhaustionDate != null || product.exhaustionDate != "") {
             duration = diffOfDates(dDateToFormat, eDateToFormat);
+            eDate = stringToDate(eDateToFormat);
         }
 
         const template = buildTemplateHTML(
@@ -112,8 +114,8 @@ function stringToDate(dateToFormat) {
 }
 
 function diffOfDates(deliveryDate, exhaustionDate) {
-    const diffTime = exhaustionDate - deliveryDate;
-    const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));    
+    let diffTime = exhaustionDate - deliveryDate;
+    let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
     return diffDays;
 }
 
@@ -129,12 +131,11 @@ add_btn.addEventListener('click', function () {
 
     if (exhaustionDate != null || exhaustionDate != "") {
         let dDateToFormat = new Date(deliveryDate);
-        let dDate = stringToDate(dDateToFormat);
         let eDateToFormat = new Date(exhaustionDate);
-        let eDate = stringToDate(eDateToFormat);
 
-        duration = diffOfDates(dDate, eDate);
+        duration = diffOfDates(dDateToFormat, eDateToFormat);
     }
+
 
     // puts the parameters into a new object 
     let itemToAdd = {
@@ -200,9 +201,7 @@ function activateModifyButtons() {
             fillEditFields(id);
             modify_id = id;
         });
-
     };
-
 }
 
 async function fillEditFields(id) {
@@ -213,18 +212,18 @@ async function fillEditFields(id) {
     editNewQuantity.value = data.quantity;
     editNewDeliveryDate.value = data.deliveryDate;
     editNewExhaustionDate.value = data.exhaustionDate;
+
 }
 
 async function modifySupply() {
 
     let duration = "da finire";
 
-    if (editNewExhaustionDate.value != null) {
-        let dDateToFormat = new Date(editNewDeliveryDate)
-        let dDate = stringToDate(dDateToFormat);
-        let eDateToFormat = new Date(editNewExhaustionDate)
-        let eDate = stringToDate(eDateToFormat);
-        duration = diffOfDates(dDate, eDate);
+    if (editNewExhaustionDate.value != null || editNewExhaustionDate.value != "") {
+        let dDateToFormat = new Date(editNewDeliveryDate.value)
+        let eDateToFormat = new Date(editNewExhaustionDate.value)
+
+        duration = diffOfDates(dDateToFormat, eDateToFormat);
     }
 
     let itemToModify = {
@@ -259,6 +258,10 @@ async function modifySupply() {
 // Creates HTML to add a new item in the list
 function buildTemplateHTML(id, product, quantity, deliveryDate, exhaustionDate, duration) {
 
+    if (duration < 0) {
+        duration = "controlla i "
+    }
+
     return `
                 <ul class="newItem" id=${id}>
                     <li class="product-item">${product}</li>
@@ -273,7 +276,7 @@ function buildTemplateHTML(id, product, quantity, deliveryDate, exhaustionDate, 
 
 let index = false;
 
-// Fetches data from the db ordered by product
+// Fetches data from the db ordered by "order"
 async function orderBy(order) {
     let apiUrl = "";
     if (index == false) {
@@ -290,21 +293,23 @@ async function orderBy(order) {
     const response = await fetch(apiUrl);
     const data = await response.json();
     products = data;
-
+    
     products.forEach((product) => {
         let dDateToFormat = new Date(product.deliveryDate);
         let dDate = stringToDate(dDateToFormat);
         let eDateToFormat = new Date(product.exhaustionDate);
         let eDate = stringToDate(eDateToFormat);
-
+        
         const template = buildTemplateHTML(
             product.id,
             product.product,
             product.quantity,
             dDate,
             eDate,
-            duration
+            product.duration
         );
+
+
         itemsList.innerHTML += template;
     });
     activateDeleteButtons();
@@ -313,7 +318,6 @@ async function orderBy(order) {
 }
 
 async function goTo(section) {
-    console.log(section);
     let url = `${section}.html`
     window.location = url;
 }
