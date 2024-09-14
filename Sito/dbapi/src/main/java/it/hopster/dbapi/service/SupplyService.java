@@ -1,6 +1,7 @@
 package it.hopster.dbapi.service;
 
 import it.hopster.dbapi.exception.FoodNotFoundException;
+import it.hopster.dbapi.exception.SupplyNotFoundException;
 import it.hopster.dbapi.model.Supply;
 import it.hopster.dbapi.repository.SupplyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -75,9 +76,9 @@ public class SupplyService {
     }
 
     public Supply updateSupply(Long id, Supply updatedSupply) {
-        Supply supply = supplyRepository.findById(id).orElseThrow(() -> new FoodNotFoundException("Prodotto non trovato"));
+        Supply supply = supplyRepository.findById(id).orElseThrow(() -> new SupplyNotFoundException("Prodotto non trovato"));
         if (!supply.getId().equals(updatedSupply.getId())) {
-            throw new FoodNotFoundException("ID prodotti discordanti");
+            throw new SupplyNotFoundException("ID prodotti discordanti");
         }
         return supplyRepository.save(updatedSupply);
     }

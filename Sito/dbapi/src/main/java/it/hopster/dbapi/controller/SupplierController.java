@@ -5,7 +5,6 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.hopster.dbapi.exception.SupplierNotFoundException;
-import it.hopster.dbapi.model.Invoice;
 import it.hopster.dbapi.model.Supplier;
 import it.hopster.dbapi.service.SupplierService;
 import org.slf4j.Logger;
@@ -31,8 +30,8 @@ public class SupplierController {
     @GetMapping
     @Operation(summary = "Recupera fornitori", description = "Recupera tutti i fornitori sul database")
     @ApiResponse(responseCode = "200", description = "Fornitori recuperati con successo")
-    public List<Supplier> getAllSuppliers() {
-        return supplierService.getAllSuppliers();
+    public List<Supplier> getAllSuppliers(@RequestParam(required = false) String orderBy, @RequestParam(required = false) String orderByDesc) {
+        return supplierService.getAllSuppliers(orderBy, orderByDesc);
     }
 
     @GetMapping("/{id}")
@@ -53,32 +52,23 @@ public class SupplierController {
     @PostMapping
     @Operation(summary = "Aggiunge un fornitore", description = "Aggiunge un nuovo fornitore sul database")
     @ApiResponse(responseCode = "200", description = "Fornitore aggiunto con successo")
-    public ResponseEntity<Supplier> createSupplier(
-            @RequestParam String supplierName, @RequestParam Long partitaIVA,
-            @RequestParam String registeredOffice, @RequestParam String suppliesType,
-            @RequestParam List<Invoice> invoices, @RequestParam Invoice invoice
-    ) {
-        Supplier newSupplier = supplierService.createSupplier(
-                supplierName, partitaIVA, registeredOffice, suppliesType, invoices, invoice);
+    public ResponseEntity<Supplier> createSupplier(@RequestBody Supplier supplier) {
+        Supplier newSupplier = new Supplier();
+        newSupplier.setSupplierName(supplier.getSupplierName());
+        newSupplier.setIVANumber(supplier.getIVANumber());
+        newSupplier.setRegisteredOffice(supplier.getRegisteredOffice());
+        newSupplier.setSuppliesType(supplier.getSuppliesType());
+        newSupplier.setInvoices(supplier.getInvoices());
+        supplierService.createSupplier(newSupplier);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSupplier);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Modifica dettagli fornitore", description = "Modifica i dettagli di un fornitore trovato tramite id")
     @ApiResponse(responseCode = "200", description = "Fornitore modificato con successo")
-    public Supplier updateSupplier(@PathVariable Long id,
-                                   @RequestParam String supplierName, @RequestParam Long partitaIVA,
-                                   @RequestParam String registeredOffice, @RequestParam String suppliesType,
-                                   @RequestParam List<Invoice> invoices, @RequestParam Invoice invoice
-    ) {
-        Supplier updatedSupplier = supplierService.updateSupplier(
-                supplierName, partitaIVA, registeredOffice, suppliesType, invoices, invoice);
-        if (updatedSupplier == null) {
-            logger.error("Fornitore non trovato con quell'id");
-            throw new SupplierNotFoundException("Supplier not found with id: " + id);
-        } else {
-            return updatedSupplier;
-        }
+    public ResponseEntity<Supplier> updateSupplier(@PathVariable Long id, @RequestBody Supplier supplier) {
+        Supplier updatedSupplier = supplierService.updateSupplier(id, supplier);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedSupplier);
     }
 
     @DeleteMapping("/{id}")

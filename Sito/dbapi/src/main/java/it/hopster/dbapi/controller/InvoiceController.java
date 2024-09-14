@@ -32,8 +32,8 @@ public class InvoiceController {
     @GetMapping
     @Operation(summary = "Recupera fatture", description = "Recupera tutte le fatture sul database")
     @ApiResponse(responseCode = "200", description = "Fatture recuperate con successo")
-    public List<Invoice> getAllInvoices() {
-        return invoiceService.getAllInvoices();
+    public List<Invoice> getAllInvoices(@RequestParam(required = false) String orderBy, @RequestParam(required = false) String orderByDesc) {
+        return invoiceService.getAllInvoices(orderBy, orderByDesc);
     }
 
     @GetMapping("/{id}")
@@ -54,28 +54,22 @@ public class InvoiceController {
     @PostMapping
     @Operation(summary = "Aggiunge una fattura", description = "Aggiunge una nuova fattura sul database")
     @ApiResponse(responseCode = "200", description = "Fattura aggiunta con successo")
-    public ResponseEntity<Invoice> createInvoice(
-            @RequestParam Long invoiceNumber, @RequestParam Date deliveryDate,
-            @RequestParam String suppliesType, @RequestParam Supplier supplier
-    ) {
-        Invoice newInvoice = invoiceService.createInvoice(invoiceNumber, deliveryDate, suppliesType, supplier);
+    public ResponseEntity<Invoice> createInvoice(@RequestBody Invoice invoice) {
+        Invoice newInvoice = new Invoice();
+        newInvoice.setInvoiceNumber(invoice.getInvoiceNumber());
+        newInvoice.setDeliveryDate(invoice.getDeliveryDate());
+        newInvoice.setSuppliesType(invoice.getSuppliesType());
+        newInvoice.setSupplier(invoice.getSupplier());
+        invoiceService.createInvoice(newInvoice);
         return ResponseEntity.status(HttpStatus.CREATED).body(newInvoice);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Modifica dettagli fattura", description = "Modifica i dettagli di una fattura trovata tramite id")
     @ApiResponse(responseCode = "200", description = "Fattura modificata con successo")
-    public Invoice updateInvoice(@PathVariable Long id,
-                                 @RequestParam Long invoiceNumber, @RequestParam Date deliveryDate,
-                                 @RequestParam String suppliesType, @RequestParam Supplier supplier
-    ) {
-        Invoice updatedInvoice = invoiceService.updateInvoice(invoiceNumber, deliveryDate, suppliesType, supplier);
-        if (updatedInvoice == null) {
-            logger.error("Fattura non trovata con quell'id");
-            throw new InvoiceNotFoundException("Invoice not found with id: " + id);
-        } else {
-            return updatedInvoice;
-        }
+    public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody Invoice invoice) {
+        Invoice updatedInvoice = invoiceService.updateInvoice(id, invoice);
+        return ResponseEntity.status(HttpStatus.OK).body(updatedInvoice);
     }
 
     @DeleteMapping("/{id}")

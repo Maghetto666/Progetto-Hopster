@@ -1,5 +1,8 @@
 package it.hopster.dbapi.service;
 
+import it.hopster.dbapi.exception.FoodNotFoundException;
+import it.hopster.dbapi.exception.SupplierNotFoundException;
+import it.hopster.dbapi.model.Food;
 import it.hopster.dbapi.model.Invoice;
 import it.hopster.dbapi.model.Supplier;
 
@@ -20,7 +23,36 @@ public class SupplierService {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    public List<Supplier> getAllSuppliers() {
+    public List<Supplier> getAllSuppliers(String orderBy, String orderByDesc) {
+        if (orderBy == null && orderByDesc == null) {
+            return supplierRepository.findAll();
+        }
+        if (orderBy != null && !orderBy.isEmpty()) {
+            return orderBy(orderBy);
+        }
+        if (orderByDesc != null && !orderByDesc.isEmpty())
+            return orderByDesc(orderByDesc);
+
+        return supplierRepository.findAll();
+    }
+
+    private List<Supplier> orderBy(String orderBy) {
+        if (orderBy.equals("supplierName")) {
+            return supplierRepository.findByOrderBySupplierName();
+        }
+        if (orderBy.equals("suppliesType")) {
+            return supplierRepository.findByOrderBySuppliesType();
+        }
+        return supplierRepository.findAll();
+    }
+
+    private List<Supplier> orderByDesc(String orderBy) {
+        if (orderBy.equals("supplierName")) {
+            return supplierRepository.findByOrderBySupplierNameDesc();
+        }
+        if (orderBy.equals("suppliesType")) {
+            return supplierRepository.findByOrderBySuppliesTypeDesc();
+        }
         return supplierRepository.findAll();
     }
 
@@ -28,26 +60,15 @@ public class SupplierService {
         return supplierRepository.findById(id).orElse(null);
     }
 
-    public Supplier createSupplier(
-            String supplierName, Long partitaIVA,
-            String registeredOffice, String suppliesType,
-            List<Invoice> invoices, Invoice invoice
-    ) {
-        Supplier newSupplier = new Supplier(
-                null, supplierName, partitaIVA, registeredOffice, suppliesType, invoices, invoice
-        );
+    public Supplier createSupplier(Supplier newSupplier) {
         return supplierRepository.save(newSupplier);
     }
 
-    public Supplier updateSupplier(
-            String supplierName, Long partitaIVA,
-            String registeredOffice, String suppliesType,
-            List<Invoice> invoices, Invoice invoice
-    ) {
-        Supplier supplier = new Supplier(
-                null, supplierName, partitaIVA, registeredOffice, suppliesType, invoices, invoice
-        );
-        return supplierRepository.save(supplier);
+    public Supplier updateSupplier(Long id, Supplier updatedSupplier) {
+        Supplier supplier = supplierRepository.findById(id).orElseThrow(() -> new SupplierNotFoundException("Fornitore non trovato"));
+        if (!supplier.getId().equals(updatedSupplier.getId()))
+            throw new SupplierNotFoundException("ID fornitori discordanti");
+        return supplierRepository.save(updatedSupplier);
     }
 
     public boolean deleteSupplier(Long id) {

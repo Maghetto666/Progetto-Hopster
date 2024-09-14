@@ -267,7 +267,7 @@ function buildTemplateHTML(id, product, brand, quantity, deliveryDate, expiringD
 
 let index = false;
 
-// Fetches data from the db ordered by product
+// Fetches data from the db ordered by "order"
 async function orderBy(order) {
     let apiUrl = "";
     if (index == false) {

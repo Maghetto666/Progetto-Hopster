@@ -1,5 +1,6 @@
 package it.hopster.dbapi.model;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -19,12 +20,11 @@ public class Supplier implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String supplierName;
-    private Long partitaIVA;
+    private Long IVANumber;
     private String registeredOffice;
     private String suppliesType;
 
-    @OneToMany(mappedBy = "supplier", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
+    @Nullable
     private List<Invoice> invoices;
-    @JoinColumn(name = "invoice_id")
-    private Invoice invoice;
 }

@@ -24,7 +24,6 @@ public class FoodService {
         }
         if (orderByDesc != null && !orderByDesc.isEmpty())
             return orderByDesc(orderByDesc);
-
         return foodRepository.findAll();
     }
 

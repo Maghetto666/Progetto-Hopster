@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Date;
 
 
@@ -20,7 +21,7 @@ public class Invoice implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private Long invoiceNumber;
-    private Date deliveryDate;
+    private LocalDate deliveryDate;
     private String suppliesType;
 
     @ManyToOne

@@ -1,5 +1,6 @@
 package it.hopster.dbapi.service;
 
+import it.hopster.dbapi.exception.DrinkNotFoundException;
 import it.hopster.dbapi.exception.FoodNotFoundException;
 import it.hopster.dbapi.model.Drink;
 import it.hopster.dbapi.model.Food;
@@ -79,9 +80,9 @@ public class DrinkService {
     }
 
     public Drink updateDrink(Long id, Drink updatedDrink) {
-        Drink drink = drinkRepository.findById(id).orElseThrow(() -> new FoodNotFoundException("Bevanda non trovata"));
+        Drink drink = drinkRepository.findById(id).orElseThrow(() -> new DrinkNotFoundException("Bevanda non trovata"));
         if (!drink.getId().equals(updatedDrink.getId())) {
-            throw new FoodNotFoundException("ID bevande discordanti");
+            throw new DrinkNotFoundException("ID bevande discordanti");
         }
         return drinkRepository.save(updatedDrink);
     }
