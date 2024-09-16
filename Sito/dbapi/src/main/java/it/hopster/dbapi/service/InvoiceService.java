@@ -22,7 +22,7 @@ public class InvoiceService {
     @Autowired
     private SupplierRepository supplierRepository;
 
-    private final InvoiceMapper invoiceMapper =InvoiceMapper.INSTANCE;
+    private final InvoiceMapper invoiceMapper = InvoiceMapper.INSTANCE;
 
     public List<Invoice> getAllInvoices(String orderBy, String orderByDesc) {
         if (orderBy == null && orderByDesc == null) {
@@ -38,6 +38,9 @@ public class InvoiceService {
     }
 
     private List<Invoice> orderBy(String orderBy) {
+        if (orderBy.equals("invoiceNumber")) {
+            return invoiceRepository.findByOrderByInvoiceNumber();
+        }
         if (orderBy.equals("deliveryDate")) {
             return invoiceRepository.findByOrderByDeliveryDate();
         }
@@ -51,7 +54,10 @@ public class InvoiceService {
     }
 
     private List<Invoice> orderByDesc(String orderBy) {
-        if (orderBy.equals("deliveryDate();")) {
+        if (orderBy.equals("invoiceNumber")) {
+            return invoiceRepository.findByOrderByInvoiceNumberDesc();
+        }
+        if (orderBy.equals("deliveryDate")) {
             return invoiceRepository.findByOrderByDeliveryDateDesc();
         }
         if (orderBy.equals("suppliesType")) {

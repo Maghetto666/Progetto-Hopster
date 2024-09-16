@@ -20,7 +20,7 @@ public class Supplier implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String supplierName;
-    private Long IVANumber;
+    private String IVANumber;
     private String registeredOffice;
     private String suppliesType;
 
