@@ -9,9 +9,13 @@ import java.util.List;
 public interface SupplierRepository extends JpaRepository<Supplier, Long> {
     List<Supplier> findByOrderBySupplierName();
 
+    List<Supplier> findByOrderByIVANumber();
+
     List<Supplier> findByOrderBySuppliesType();
 
     List<Supplier> findByOrderBySupplierNameDesc();
+
+    List<Supplier> findByOrderByIVANumberDesc();
 
     List<Supplier> findByOrderBySuppliesTypeDesc();
 }

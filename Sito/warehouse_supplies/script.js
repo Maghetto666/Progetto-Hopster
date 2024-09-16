@@ -91,7 +91,6 @@ async function fetchSupplies() {
 }
 
 function showAlarms() {
-
     // Shows alarm if quantity is 0
     products.forEach(item => {
         if (item.quantity <= 0) {
@@ -111,13 +110,6 @@ function stringToDate(dateToFormat) {
 
     const formattedDay = dd + '/' + mm + '/' + yyyy;
     return formattedDay;
-}
-
-// Old function, not needed
-function diffOfDates(deliveryDate, exhaustionDate) {
-    let diffTime = exhaustionDate - deliveryDate;
-    let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
-    return diffDays;
 }
 
 // Add a new item to the list and to the local storage

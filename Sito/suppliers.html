@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>HOPSTER WAREHOUSE</title>
+    <link rel="stylesheet" href="suppliers/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+        rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Epilogue:ital,wght@0,100..900;1,100..900&family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
+        rel="stylesheet">
+</head>
+
+<body>
+    <div class="sidebar">
+
+        <div class="hopster-logo"><img src="images/Hopster%20logo.jpg" class="logo-img"></div>
+
+        <div class="upper-buttons">
+            <a class="upper-buttons-item warehouse-btn" onclick="goTo('warehouse_foods')"><img
+                    src="images/warehouse-icon.svg" class="upper-icons warehouse-icon">Magazzino</a>
+            <a class="upper-buttons-item suppliers-btn upper-selected" onclick="goTo('suppliers')"><img
+                    src="images/suppliers-icon.svg" class="upper-icons suppliers-icon selected-upper-icon">Fornitori</a>
+            <a class="upper-buttons-item invoices-btn" onclick="goTo('invoices')"><img src="images/invoices-icon.svg"
+                    class="upper-icons invoices-icon">Fatture</a>
+        </div>
+
+
+
+        <div class="profile-settings">
+            <img src="images/user_image.jpg" class="user_image">
+            <text class="profile_name">Profile name</text>
+            <a onclick="goTo('profile_settings')"><img src="images/settings-icon.svg" class="settings-icon"></a>
+        </div>
+    </div>
+
+    <div class="mainPage">
+
+        <div class="upperDiv">
+            <h1 class="warehouse-section">Fornitori</h1>
+            <div class="dropdown">
+                <button class="dropbtn" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Ordina per...
+                </button>
+                <div class="dropdown-content">
+                    <a class="dropdown-item" onclick="orderBy('supplierName')">Fornitore</a>
+                    <a class="dropdown-item" onclick="orderBy('ivanumber')">Partita IVA</a>
+                    <a class="dropdown-item" onclick="orderBy('suppliesType')">Tipo di fornitura</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="upperBar">
+            <div class="supplierName-upperBar">FORNITORE</div>
+            <div class="IVANumber-upperBar">PARTITA IVA</div>
+            <div class="registeredOffice-upperBar">SEDE LEGALE</div>
+            <div class="suppliesType-upperBar">TIPO DI FORNITURA</div>
+            <div class="buttons-upperBar"></div>
+        </div>
+        <div class="listDiv">
+            <div class="itemsList">
+            </div>
+        </div>
+
+        <div class="boxes">
+            <div class="addBox">
+                <input type="text" class="supplierName-input" placeholder="Fornitore" maxlength="110" required>
+                <input type="text" class="IVANumber-input" placeholder="Partita IVA" maxlength="110" required>
+                <input type="text" class="registeredOffice-input" placeholder="Sede legale" maxlength="110" required>
+                <input type="text" class="suppliesType-input" placeholder="Tipo di fornitura" required>
+                <button class="add-btn"><img src="images/add.svg"></button>
+            </div>
+            <div class="editBox">
+                <input type="text" class="editNewSupplierName" placeholder="Fornitore" maxlength="110" required>
+                <input type="text" class="editNewIVANumber" placeholder="Partita IVA" maxlength="110" required>
+                <input type="text" class="editNewRegisteredOffice" placeholder="Sede legale" maxlength="110" required>
+                <input type="text" class="editNewSuppliesType" placeholder="Tipo di fornitura" maxlength="110" required>
+                <button class="edit-btn" onclick="modifySuppliers()"><img src="images/edit.svg"></button>
+            </div>
+        </div>
+    </div>
+    <script src="suppliers/script.js"></script>
+</body>
+
+</html>

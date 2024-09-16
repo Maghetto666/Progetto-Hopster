@@ -40,6 +40,9 @@ public class SupplierService {
         if (orderBy.equals("supplierName")) {
             return supplierRepository.findByOrderBySupplierName();
         }
+        if (orderBy.equals("ivanumber")) {
+            return supplierRepository.findByOrderByIVANumber();
+        }
         if (orderBy.equals("suppliesType")) {
             return supplierRepository.findByOrderBySuppliesType();
         }
@@ -49,6 +52,9 @@ public class SupplierService {
     private List<Supplier> orderByDesc(String orderBy) {
         if (orderBy.equals("supplierName")) {
             return supplierRepository.findByOrderBySupplierNameDesc();
+        }
+        if (orderBy.equals("ivanumber")) {
+            return supplierRepository.findByOrderByIVANumberDesc();
         }
         if (orderBy.equals("suppliesType")) {
             return supplierRepository.findByOrderBySuppliesTypeDesc();
