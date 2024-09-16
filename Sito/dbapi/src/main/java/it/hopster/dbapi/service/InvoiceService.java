@@ -19,6 +19,7 @@ public class InvoiceService {
 
     @Autowired
     private InvoiceRepository invoiceRepository;
+    @Autowired
     private SupplierRepository supplierRepository;
 
     private final InvoiceMapper invoiceMapper =InvoiceMapper.INSTANCE;
