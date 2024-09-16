@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.util.Date;
 
 @Entity(name = "Supply")
 @Table(name = "supplies")
@@ -27,6 +26,7 @@ public class Supply implements Serializable {
     private LocalDate deliveryDate;
     @Nullable
     private LocalDate exhaustionDate;
+    @Column(name = "duration", insertable = false, updatable = false, columnDefinition = "INT GENERATED ALWAYS AS (DATEDIFF(exhaustion_date, delivery_date)) STORED")
     @Nullable
     private Integer duration;
 }

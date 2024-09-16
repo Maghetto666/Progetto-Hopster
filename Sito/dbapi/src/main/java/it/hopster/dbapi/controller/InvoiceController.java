@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import it.hopster.dbapi.exception.InvoiceNotFoundException;
 import it.hopster.dbapi.model.Invoice;
+import it.hopster.dbapi.model.InvoiceDTO;
 import it.hopster.dbapi.model.Supplier;
 import it.hopster.dbapi.service.InvoiceService;
 import org.slf4j.Logger;
@@ -54,20 +55,15 @@ public class InvoiceController {
     @PostMapping
     @Operation(summary = "Aggiunge una fattura", description = "Aggiunge una nuova fattura sul database")
     @ApiResponse(responseCode = "200", description = "Fattura aggiunta con successo")
-    public ResponseEntity<Invoice> createInvoice(@RequestBody Invoice invoice) {
-        Invoice newInvoice = new Invoice();
-        newInvoice.setInvoiceNumber(invoice.getInvoiceNumber());
-        newInvoice.setDeliveryDate(invoice.getDeliveryDate());
-        newInvoice.setSuppliesType(invoice.getSuppliesType());
-        newInvoice.setSupplier(invoice.getSupplier());
-        invoiceService.createInvoice(newInvoice);
+    public ResponseEntity<Invoice> createInvoice(@RequestBody InvoiceDTO invoiceDTO) {
+        Invoice newInvoice = invoiceService.createInvoice(invoiceDTO);
         return ResponseEntity.status(HttpStatus.CREATED).body(newInvoice);
     }
 
     @PutMapping("{id}")
     @Operation(summary = "Modifica dettagli fattura", description = "Modifica i dettagli di una fattura trovata tramite id")
     @ApiResponse(responseCode = "200", description = "Fattura modificata con successo")
-    public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody Invoice invoice) {
+    public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody InvoiceDTO invoice) {
         Invoice updatedInvoice = invoiceService.updateInvoice(id, invoice);
         return ResponseEntity.status(HttpStatus.OK).body(updatedInvoice);
     }

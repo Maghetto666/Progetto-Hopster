@@ -51,7 +51,6 @@ async function fetchSupplies() {
     const data = await response.json();
     products = data;
 
-
     // Updates the list
     itemsList.innerHTML = '';
     product_input.value = "";
@@ -69,12 +68,13 @@ async function fetchSupplies() {
         let dDate = stringToDate(dDateToFormat);
         let eDateToFormat = new Date(product.exhaustionDate);
         let eDate = "da finire";
-        let duration = null;
-        if (product.exhaustionDate != null || product.exhaustionDate != "") {
-            duration = diffOfDates(dDateToFormat, eDateToFormat);
+        let duration = "";
+        
+        if (product.exhaustionDate != null && product.exhaustionDate != "") {   
             eDate = stringToDate(eDateToFormat);
+            duration = product.duration;
         }
-
+        
         const template = buildTemplateHTML(
             product.id,
             product.product,
@@ -113,6 +113,7 @@ function stringToDate(dateToFormat) {
     return formattedDay;
 }
 
+// Old function, not needed
 function diffOfDates(deliveryDate, exhaustionDate) {
     let diffTime = exhaustionDate - deliveryDate;
     let diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
@@ -126,24 +127,17 @@ add_btn.addEventListener('click', function () {
     let product = product_input.value.trim();
     let quantity = quantity_input.value;
     let deliveryDate = deliveryDate_input.value;
-    let exhaustionDate = exhaustionDate_input.value;
-    let duration = "da finire";
-
-    if (exhaustionDate != null || exhaustionDate != "") {
-        let dDateToFormat = new Date(deliveryDate);
-        let eDateToFormat = new Date(exhaustionDate);
-
-        duration = diffOfDates(dDateToFormat, eDateToFormat);
-    }
-
+    let exhaustionDate = "da finire";
+    if (exhaustionDate_input.value != null) {
+        exhaustionDate = exhaustionDate_input.value
+    };
 
     // puts the parameters into a new object 
     let itemToAdd = {
         product: product,
         quantity: quantity,
         deliveryDate: deliveryDate,
-        exhaustionDate: exhaustionDate,
-        duration: duration
+        exhaustionDate: exhaustionDate
     }
 
     // checks if every field is compiled
@@ -217,22 +211,12 @@ async function fillEditFields(id) {
 
 async function modifySupply() {
 
-    let duration = "da finire";
-
-    if (editNewExhaustionDate.value != null || editNewExhaustionDate.value != "") {
-        let dDateToFormat = new Date(editNewDeliveryDate.value)
-        let eDateToFormat = new Date(editNewExhaustionDate.value)
-
-        duration = diffOfDates(dDateToFormat, eDateToFormat);
-    }
-
     let itemToModify = {
         id: modify_id,
         product: editNewProduct.value,
         quantity: editNewQuantity.value,
         deliveryDate: editNewDeliveryDate.value,
-        exhaustionDate: editNewExhaustionDate.value,
-        duration: duration
+        exhaustionDate: editNewExhaustionDate.value
     }
 
     editBox.style.visibility = "hidden";
@@ -258,8 +242,14 @@ async function modifySupply() {
 // Creates HTML to add a new item in the list
 function buildTemplateHTML(id, product, quantity, deliveryDate, exhaustionDate, duration) {
 
-    if (duration < 0) {
-        duration = "controlla i "
+    if (duration <= 0) {
+        duration = ""
+    } else {
+        duration = duration + " giorni"
+    }
+
+    if (exhaustionDate == null || exhaustionDate == "") {
+        exhaustionDate = "da finire";
     }
 
     return `
@@ -268,7 +258,7 @@ function buildTemplateHTML(id, product, quantity, deliveryDate, exhaustionDate, 
                     <li class="quantity-item toFinish">${quantity}</li>
                     <li class="deliveryDate-item">${deliveryDate}</li>
                     <li class="exhaustionDate-item">${exhaustionDate}</li>
-                    <li class="duration-item">${duration} giorni</li>
+                    <li class="duration-item">${duration}</li>
                     <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
                 </ul>
     `
@@ -298,15 +288,19 @@ async function orderBy(order) {
         let dDateToFormat = new Date(product.deliveryDate);
         let dDate = stringToDate(dDateToFormat);
         let eDateToFormat = new Date(product.exhaustionDate);
-        let eDate = stringToDate(eDateToFormat);
-        
+        let eDate = "da finire"
+        let duration = "";
+        if (product.exhaustionDate != null && product.exhaustionDate != "") {   
+            eDate = stringToDate(eDateToFormat);
+            duration = product.duration;
+        }
         const template = buildTemplateHTML(
             product.id,
             product.product,
             product.quantity,
             dDate,
             eDate,
-            product.duration
+            duration
         );
 
 

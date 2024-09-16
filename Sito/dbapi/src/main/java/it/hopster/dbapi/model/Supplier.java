@@ -24,7 +24,9 @@ public class Supplier implements Serializable {
     private String registeredOffice;
     private String suppliesType;
 
+    /*
     @OneToMany(mappedBy = "id", cascade = CascadeType.ALL, orphanRemoval = true)
     @Nullable
     private List<Invoice> invoices;
+    */
 }

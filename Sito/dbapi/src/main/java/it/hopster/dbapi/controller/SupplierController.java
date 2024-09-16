@@ -58,7 +58,6 @@ public class SupplierController {
         newSupplier.setIVANumber(supplier.getIVANumber());
         newSupplier.setRegisteredOffice(supplier.getRegisteredOffice());
         newSupplier.setSuppliesType(supplier.getSuppliesType());
-        newSupplier.setInvoices(supplier.getInvoices());
         supplierService.createSupplier(newSupplier);
         return ResponseEntity.status(HttpStatus.CREATED).body(newSupplier);
     }
