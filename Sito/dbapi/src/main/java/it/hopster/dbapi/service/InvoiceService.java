@@ -80,7 +80,7 @@ public class InvoiceService {
     }
 
     public Invoice updateInvoice(Long id, InvoiceDTO invoiceDTO) {
-        supplierRepository.findById(id).orElseThrow(() -> new SupplierNotFoundException("Fornitore non trovato"));
+        supplierRepository.findById(invoiceDTO.getSupplier_id()).orElseThrow(() -> new SupplierNotFoundException("Fornitore non trovato"));
         Invoice updatedInvoice = invoiceMapper.DTOToEntity(invoiceDTO);
         updatedInvoice.setId(id);
         return invoiceRepository.save(updatedInvoice);

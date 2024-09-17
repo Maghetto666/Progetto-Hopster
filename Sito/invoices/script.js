@@ -31,10 +31,29 @@ editBox.style.visibility = "hidden";
 // Starters
 let modify_id = 0;
 let products = [];
+fetchSuppliers();
 fetchInvoices();
-fetchSuppliers()
 
-// Fetches data from the db
+// Fetch suppliers from DB
+async function fetchSuppliers() {
+    const apiUrl = 'http://localhost:8080/suppliers';
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    suppliers = data;
+
+    suppliers.forEach((supplier) => {
+        const template = buildCategoriesHTML(supplier);
+        supplier_input.innerHTML += template;
+        editNewSupplier.innerHTML += template;
+    })
+}
+
+// Creates HTML for the supplier selection
+function buildCategoriesHTML(supplier) {
+    return `<option value="${supplier.id}">${supplier.supplierName}</option>`
+}
+
+// Fetch data from the db
 async function fetchInvoices() {
     // Calls the API and put data into an array
     const apiUrl = 'http://localhost:8080/invoices';
@@ -47,13 +66,13 @@ async function fetchInvoices() {
     invoiceNumber_input.value = "";
     deliveryDate_input.value = "";
     suppliesType_input.value = "";
-    supplier_input.value = "";
+    supplier_input.value = 0;
 
 
     editNewInvoiceNumber.value = "";
     editNewDeliveryDate.value = "";
     editNewSuppliesType.value = "";
-    editNewSupplier.value = "";
+    editNewSupplier.value = 0;
 
 
     products.forEach((product) => {
@@ -76,6 +95,21 @@ async function fetchInvoices() {
     activateModifyButtons();
 }
 
+// Creates HTML to add a new item in the list
+function buildTemplateHTML(id, invoiceNumber, deliveryDate, suppliesType, supplier) {
+
+    return `
+                <ul class="newItem" id=${id}>
+                    <li class="invoiceNumber-item">${invoiceNumber}</li>
+                    <li class="deliveryDate-item">${deliveryDate}</li>
+                    <li class="suppliesType-item">${suppliesType}</li>
+                    <li class="supplier-item">${supplier}</li>
+                    <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
+                </ul>
+    `
+}
+
+// Format date to european style
 function stringToDate(dateToFormat) {
     const yyyy = dateToFormat.getFullYear();
     let mm = dateToFormat.getMonth() + 1;
@@ -86,22 +120,6 @@ function stringToDate(dateToFormat) {
 
     const formattedDay = dd + '/' + mm + '/' + yyyy;
     return formattedDay;
-}
-
-async function fetchSuppliers() {
-    const apiUrl = 'http://localhost:8080/suppliers';
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    suppliers = data;
-    for (let i = 0; i < suppliers.length; i++) {
-        const template = buildCategoriesHTML(suppliers[i]);
-        supplier_input.innerHTML += template;
-        editNewSupplier.innerHTML += template;
-    }
-}
-
-function buildCategoriesHTML(supplier) {
-    return `<option value="${supplier.id}">${supplier.supplierName}</option>`
 }
 
 // Add a new item to the list and to the local storage
@@ -156,7 +174,6 @@ function activateDeleteButtons() {
 }
 
 async function deleteSupplier(id) {
-
     await fetch(`http://localhost:8080/invoices/${id}`, {
         method: 'DELETE'
     });
@@ -189,20 +206,19 @@ async function fillEditFields(id) {
     editNewInvoiceNumber.value = data.invoiceNumber;
     editNewDeliveryDate.value = data.deliveryDate;
     editNewSuppliesType.value = data.suppliesType;
-    editNewSupplier = data.supplier;
+    editNewSupplier.value = supplier.id;
 }
 
 async function modifyInvoices() {
 
+    let supplier = editNewSupplier.value;
+    
     let itemToModify = {
-        id: modify_id,
         invoiceNumber: editNewInvoiceNumber.value,
         deliveryDate: editNewDeliveryDate.value,
         suppliesType: editNewSuppliesType.value,
-        supplier_id: editNewSupplier.value
+        supplier_id: supplier
     }
-
-    console.log(itemToModify.supplier_id);
 
     editBox.style.visibility = "hidden";
     addBox.style.visibility = "visible";
@@ -222,20 +238,6 @@ async function modifyInvoices() {
     };
 
     fetchInvoices();
-}
-
-// Creates HTML to add a new item in the list
-function buildTemplateHTML(id, invoiceNumber, deliveryDate, suppliesType, supplier) {
-
-    return `
-                <ul class="newItem" id=${id}>
-                    <li class="invoiceNumber-item">${invoiceNumber}</li>
-                    <li class="deliveryDate-item">${deliveryDate}</li>
-                    <li class="suppliesType-item">${suppliesType}</li>
-                    <li class="supplier-item">${supplier}</li>
-                    <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
-                </ul>
-    `
 }
 
 let index = false;

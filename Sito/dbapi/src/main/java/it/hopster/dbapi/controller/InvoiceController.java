@@ -63,8 +63,8 @@ public class InvoiceController {
     @PutMapping("{id}")
     @Operation(summary = "Modifica dettagli fattura", description = "Modifica i dettagli di una fattura trovata tramite id")
     @ApiResponse(responseCode = "200", description = "Fattura modificata con successo")
-    public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody InvoiceDTO invoice) {
-        Invoice updatedInvoice = invoiceService.updateInvoice(id, invoice);
+    public ResponseEntity<Invoice> updateInvoice(@PathVariable Long id, @RequestBody InvoiceDTO invoiceDTO) {
+        Invoice updatedInvoice = invoiceService.updateInvoice(id, invoiceDTO);
         return ResponseEntity.status(HttpStatus.OK).body(updatedInvoice);
     }
 

@@ -118,59 +118,6 @@ a:visited .bottom-buttons{
   background: #1D2128FF;
 }
 
-.bottom-buttons {
-  margin: 1vh 2vh auto 2vh;
-  display: flex;
-  flex-direction: column;
-  font-family: Inter;
-  font-size: 32px;
-  line-height: 26px;
-  font-weight: 400;
-  opacity: 1;
-  color: #565e6c;
-  background: #1D2128FF;
-}
-
-.bottom-buttons .bottom-buttons-item {
-  padding: 16px;
-  display: flex;
-  align-items: center;
-  justify-content: left;
-  border-radius: 4px;
-  gap: 8px;
-  cursor: pointer;
-  white-space: nowrap;
-  font-size: 32px;
-}
-
-.bottom-buttons .bottom-buttons-item.indent {
-  padding-left: 33px;
-}
-
-.bottom-buttons .bottom-buttons-item:hover {
-  color: #00bdd6;
-  background: #1D2128FF;
-}
-
-.bottom-selected {
-  color: #00BDD6FF;
-  background: #1D2128FF;
-}
-
-.bottom-icons {
-  max-width: 32px;
-  width: 32px;
-  filter: invert(35%) sepia(7%) saturate(1187%) hue-rotate(180deg) brightness(94%) contrast(81%);
-}
-
-.bottom-icons-hover {
-  filter: invert(47%) sepia(68%) saturate(1590%) hue-rotate(151deg) brightness(103%) contrast(101%);
-}
-
-.selected-bottom-icon {
-  filter: invert(47%) sepia(68%) saturate(1590%) hue-rotate(151deg) brightness(103%) contrast(101%);
-}
-
 .profile-settings {
   display: flex;
   justify-content: space-around;
