@@ -22,4 +22,6 @@ public interface InvoiceRepository extends JpaRepository<Invoice, Long> {
     List<Invoice> findByOrderBySuppliesTypeDesc();
 
     List<Invoice> findByOrderBySupplierDesc();
+
+    List<Invoice> findBySupplierId(Long supplier_id);
 }

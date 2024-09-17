@@ -69,6 +69,10 @@ public class InvoiceService {
         return invoiceRepository.findAll();
     }
 
+    public List<Invoice> getInvoicesBySupplierId(Long supplierId) {
+        return invoiceRepository.findBySupplierId(supplierId);
+    }
+
     public Invoice getInvoiceById(Long id) {
         return invoiceRepository.findById(id).orElse(null);
     }

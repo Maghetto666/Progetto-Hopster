@@ -7,7 +7,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import it.hopster.dbapi.exception.InvoiceNotFoundException;
 import it.hopster.dbapi.model.Invoice;
 import it.hopster.dbapi.model.InvoiceDTO;
-import it.hopster.dbapi.model.Supplier;
 import it.hopster.dbapi.service.InvoiceService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -50,6 +48,12 @@ public class InvoiceController {
             throw new InvoiceNotFoundException("Invoice not found with id: " + id);
         }
         return invoice;
+    }
+
+    @GetMapping("/by-supplier/{supplierId}")
+    @CrossOrigin
+    public List<Invoice> getInvoicesBySupplier(@PathVariable Long supplierId) {
+        return invoiceService.getInvoicesBySupplierId(supplierId);
     }
 
     @PostMapping

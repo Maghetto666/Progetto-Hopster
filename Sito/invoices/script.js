@@ -87,7 +87,8 @@ async function fetchInvoices() {
             product.invoiceNumber,
             dDate,
             product.suppliesType,
-            supplier.supplierName
+            supplier.supplierName,
+            supplier.id
         );
         itemsList.innerHTML += template;
     });
@@ -96,17 +97,56 @@ async function fetchInvoices() {
 }
 
 // Creates HTML to add a new item in the list
-function buildTemplateHTML(id, invoiceNumber, deliveryDate, suppliesType, supplier) {
-
+function buildTemplateHTML(id, invoiceNumber, deliveryDate, suppliesType, supplier, supplier_id) {
     return `
                 <ul class="newItem" id=${id}>
                     <li class="invoiceNumber-item">${invoiceNumber}</li>
                     <li class="deliveryDate-item">${deliveryDate}</li>
                     <li class="suppliesType-item">${suppliesType}</li>
-                    <li class="supplier-item">${supplier}</li>
+                    <li class="supplier-item" onclick="filterBySupplier(${supplier_id})">${supplier}</li>
                     <li class="modify-item"><button class="modify-btn" id="${id}"><img src="images/edit.svg"></button><button class="delete-btn" id="${id}"><img src="images/trash.svg"></button></li>
                 </ul>
     `
+}
+
+async function filterBySupplier(supplier_id) {
+    const apiUrl = `http://localhost:8080/invoices/by-supplier/${supplier_id}`;
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    products = data;
+
+    // Updates the list
+    itemsList.innerHTML = '';
+    invoiceNumber_input.value = "";
+    deliveryDate_input.value = "";
+    suppliesType_input.value = "";
+    supplier_input.value = 0;
+
+
+    editNewInvoiceNumber.value = "";
+    editNewDeliveryDate.value = "";
+    editNewSuppliesType.value = "";
+    editNewSupplier.value = 0;
+
+    products.forEach((product) => {
+
+        let dDateToFormat = new Date(product.deliveryDate);
+        let dDate = stringToDate(dDateToFormat);
+
+        let supplier = product.supplier;
+
+        const template = buildTemplateHTML(
+            product.id,
+            product.invoiceNumber,
+            dDate,
+            product.suppliesType,
+            supplier.supplierName,
+            supplier.id
+        );
+        itemsList.innerHTML += template;
+    });
+    activateDeleteButtons();
+    activateModifyButtons();
 }
 
 // Format date to european style
@@ -212,7 +252,7 @@ async function fillEditFields(id) {
 async function modifyInvoices() {
 
     let supplier = editNewSupplier.value;
-    
+
     let itemToModify = {
         invoiceNumber: editNewInvoiceNumber.value,
         deliveryDate: editNewDeliveryDate.value,
@@ -272,7 +312,8 @@ async function orderBy(order) {
             product.invoiceNumber,
             dDate,
             product.suppliesType,
-            supplier.supplierName
+            supplier.supplierName,
+            supplier.id
         );
         itemsList.innerHTML += template;
     });
