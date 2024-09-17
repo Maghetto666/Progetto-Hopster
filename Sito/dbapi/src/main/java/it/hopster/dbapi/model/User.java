@@ -22,5 +22,4 @@ public class User implements Serializable {
     private String username;
     @Column(nullable = false, length = 50)
     private String password;
-    private boolean isAdmin;
 }

@@ -22,12 +22,12 @@ public class UserService {
     }
 
     public User createUser(String username, String password, boolean isAdmin) {
-        User newUser = new User(null,username, password, isAdmin);
+        User newUser = new User(null,username, password);
         return userRepository.save(newUser);
     }
 
     public User updateUser(Long id, String username, String password, boolean isAdmin) {
-        User user = new User(id, username, password, isAdmin);
+        User user = new User(id, username, password);
         return userRepository.save(user);
     }
 
